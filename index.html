@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NAS Markets</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue-dark:#1e3a8a;--blue-mid:#1d4ed8;--blue-light:#0ea5e9;
+  --green:#22c55e;--green-dark:#15803d;--gold:#f59e0b;--gold-dark:#b45309;
+  --red:#ef4444;--purple:#7c3aed;--bg:#f0f4f8;--card:#fff;
+  --text:#1e293b;--muted:#64748b;--border:#e2e8f0;
+}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* ===== NAV ===== */
+nav{background:linear-gradient(135deg,var(--blue-dark),var(--blue-mid));height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(30,58,138,.4)}
+.logo{color:#fff;font-size:22px;font-weight:900;letter-spacing:-1px;display:flex;align-items:center;gap:6px}
+.logo span{background:linear-gradient(135deg,#f59e0b,#0ea5e9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-right{display:flex;align-items:center;gap:6px}
+.nav-btn{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25);padding:6px 14px;border-radius:20px;cursor:pointer;font-size:13px;font-family:'Tajawal',sans-serif;font-weight:700;transition:.2s;white-space:nowrap}
+.nav-btn:hover{background:rgba(255,255,255,.28)}
+.nav-btn.active{background:#fff;color:var(--blue-mid)}
+.nav-search{display:flex;align-items:center;background:rgba(255,255,255,.18);border-radius:22px;padding:0 12px;gap:6px}
+.nav-search input{background:none;border:none;outline:none;color:#fff;font-family:'Tajawal',sans-serif;font-size:14px;width:160px;padding:8px 0}
+.nav-search input::placeholder{color:rgba(255,255,255,.6)}
+@media(max-width:600px){.nav-search{display:none}.logo-text{display:none}}
+
+/* ===== PAGES ===== */
+.page{display:none;min-height:calc(100vh - 60px);animation:fadeUp .35s ease}
+.page.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== HOME ===== */
+#homePage{padding:16px}
+.home-wrap{max-width:1100px;margin:0 auto}
+
+/* mobile search */
+.mobile-search{display:none;margin-bottom:14px}
+.mobile-search input{width:100%;padding:10px 16px;border:1.5px solid var(--border);border-radius:22px;font-family:'Tajawal',sans-serif;font-size:14px;outline:none}
+@media(max-width:600px){.mobile-search{display:block}}
+
+/* CATEGORIES */
+.cats{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:16px;scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.cat-btn{padding:7px 16px;border-radius:20px;border:1.5px solid var(--border);background:#fff;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:700;white-space:nowrap;transition:.2s;color:var(--muted)}
+.cat-btn:hover,.cat-btn.active{background:var(--blue-mid);color:#fff;border-color:var(--blue-mid)}
+
+/* POST BOX */
+.post-box{background:var(--card);border-radius:16px;padding:14px;margin-bottom:18px;box-shadow:0 1px 6px rgba(0,0,0,.07);display:flex;align-items:center;gap:12px}
+.post-box-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--blue-mid),var(--blue-light));display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;flex-shrink:0}
+.post-box-btn{flex:1;padding:11px 16px;background:#f1f5f9;border:none;border-radius:22px;text-align:right;color:var(--muted);font-size:14px;cursor:pointer;font-family:'Tajawal',sans-serif;transition:.2s}
+.post-box-btn:hover{background:#e2e8f0}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+
+/* CARD */
+.card{background:var(--card);border-radius:18px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08);transition:.25s;cursor:pointer}
+.card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.14)}
+.card-img-wrap{position:relative;overflow:hidden;height:200px;background:linear-gradient(135deg,#e0e7ff,#f0f9ff)}
+.card-img-wrap img{width:100%;height:100%;object-fit:cover;transition:.3s}
+.card:hover .card-img-wrap img{transform:scale(1.05)}
+.card-img-emoji{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:72px}
+.price-badge{position:absolute;bottom:10px;right:10px;background:rgba(30,58,138,.82);backdrop-filter:blur(6px);color:#fff;padding:5px 12px;border-radius:12px;font-size:14px;font-weight:800}
+.featured-badge{position:absolute;top:10px;right:10px;background:linear-gradient(135deg,#f59e0b,#b45309);color:#fff;padding:4px 10px;border-radius:10px;font-size:12px;font-weight:800}
+.card-body{padding:14px}
+.card-seller-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.avatar-sm{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--blue-mid),var(--blue-light));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:15px;flex-shrink:0}
+.seller-name{font-size:13px;font-weight:700;color:var(--blue-mid)}
+.card-time{font-size:11px;color:var(--muted)}
+.card-title{font-size:16px;font-weight:800;margin-bottom:5px;line-height:1.3}
+.card-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-footer{display:flex;gap:8px;border-top:1px solid var(--border);padding-top:10px}
+.views{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:3px;margin-right:auto}
+
+/* ===== BUTTONS ===== */
+.btn{padding:9px 18px;border-radius:10px;border:none;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:700;transition:.2s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.btn-primary{background:linear-gradient(135deg,var(--blue-mid),var(--blue-light));color:#fff}
+.btn-primary:hover{opacity:.88}
+.btn-green{background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff}
+.btn-green:hover{opacity:.88}
+.btn-red{background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff}
+.btn-red:hover{opacity:.88}
+.btn-gold{background:linear-gradient(135deg,#f59e0b,#b45309);color:#fff}
+.btn-gold:hover{opacity:.88}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text)}
+.btn-outline:hover{background:#f1f5f9}
+.btn-full{width:100%;justify-content:center;padding:13px;font-size:15px;border-radius:12px}
+
+/* ===== MODALS ===== */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;align-items:center;justify-content:center;padding:14px}
+.overlay.open{display:flex}
+.modal{background:#fff;border-radius:20px;padding:26px;width:100%;max-width:500px;max-height:92vh;overflow-y:auto;animation:fadeUp .25s ease}
+.modal h2{font-size:20px;font-weight:900;margin-bottom:18px;text-align:center}
+.modal-close{float:left;background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);line-height:1;padding:2px}
+.form-group{margin-bottom:14px}
+label{display:block;font-size:13px;font-weight:700;margin-bottom:5px;color:var(--text)}
+input,textarea,select{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:14px;font-family:'Tajawal',sans-serif;outline:none;transition:.2s;direction:rtl;color:var(--text)}
+input:focus,textarea:focus,select:focus{border-color:var(--blue-mid);box-shadow:0 0 0 3px rgba(29,78,216,.1)}
+textarea{resize:vertical;min-height:80px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* INFO / ALERT BOXES */
+.info-box{padding:14px 16px;border-radius:12px;font-size:13px;line-height:1.7;margin-bottom:14px}
+.info-blue{background:#eff6ff;border-right:4px solid var(--blue-mid)}
+.info-yellow{background:#fffbeb;border-right:4px solid var(--gold);color:#92400e}
+.info-green{background:#f0fdf4;border-right:4px solid var(--green)}
+
+/* STEP INDICATOR */
+.steps{display:flex;gap:0;margin-bottom:22px;border-radius:12px;overflow:hidden}
+.step{flex:1;padding:10px;text-align:center;font-size:13px;font-weight:700;background:#f1f5f9;color:var(--muted)}
+.step.active{background:var(--blue-mid);color:#fff}
+
+/* IMG PREVIEW */
+.img-preview{width:100%;height:160px;border-radius:12px;background:#f1f5f9;border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;overflow:hidden;margin-top:8px}
+.img-preview img{width:100%;height:100%;object-fit:cover}
+
+/* SUCCESS SCREEN */
+.success-screen{text-align:center;padding:30px 10px}
+.success-icon{font-size:80px;margin-bottom:14px;display:block}
+
+/* ===== POST DETAIL ===== */
+#postPage{padding:16px;max-width:700px;margin:0 auto}
+.back-btn{display:flex;align-items:center;gap:6px;color:var(--blue-mid);font-weight:700;cursor:pointer;margin-bottom:16px;font-size:14px}
+.post-detail-img{width:100%;max-height:420px;object-fit:cover;border-radius:16px;margin-bottom:16px}
+.post-detail-img-emoji{width:100%;height:260px;background:linear-gradient(135deg,#e0e7ff,#f0f9ff);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:100px;margin-bottom:16px}
+.detail-card{background:#fff;border-radius:16px;padding:20px;box-shadow:0 2px 10px rgba(0,0,0,.07);margin-bottom:14px}
+.detail-price{font-size:30px;font-weight:900;color:var(--blue-dark)}
+.contact-row{display:flex;gap:10px;flex-wrap:wrap}
+
+/* ===== ADMIN ===== */
+#adminPage{padding:16px;max-width:900px;margin:0 auto}
+.admin-header{background:linear-gradient(135deg,var(--blue-dark),var(--blue-mid));color:#fff;border-radius:18px;padding:22px;margin-bottom:20px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}
+@media(max-width:600px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+.stat-card{background:rgba(255,255,255,.15);border-radius:12px;padding:14px;text-align:center}
+.stat-num{font-size:26px;font-weight:900}
+.stat-lbl{font-size:12px;opacity:.85}
+.admin-tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.tab-btn{padding:8px 18px;border:none;border-radius:20px;background:#fff;color:var(--muted);font-family:'Tajawal',sans-serif;font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.07);transition:.2s}
+.tab-btn.active{background:var(--blue-mid);color:#fff}
+.admin-list-card{background:#fff;border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:0 1px 6px rgba(0,0,0,.07);display:flex;gap:14px;align-items:flex-start}
+.admin-list-card img,.admin-list-emoji{width:72px;height:72px;border-radius:10px;object-fit:cover;flex-shrink:0;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-size:32px}
+.admin-info{flex:1;min-width:0}
+.admin-info h4{font-size:15px;font-weight:800;margin-bottom:3px}
+.admin-info p{font-size:13px;color:var(--muted);margin-bottom:2px}
+.admin-actions{display:flex;gap:6px;flex-direction:column;flex-shrink:0}
+@media(max-width:500px){.admin-list-card{flex-wrap:wrap}.admin-actions{flex-direction:row;width:100%}}
+.badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;display:inline-block}
+.badge-pending{background:#fffbeb;color:#92400e}
+.badge-approved{background:#f0fdf4;color:#166534}
+.badge-featured{background:#faf5ff;color:#6d28d9}
+
+/* FLOAT BTN */
+.float-btn{position:fixed;bottom:24px;left:24px;background:linear-gradient(135deg,var(--blue-light),var(--blue-mid));color:#fff;border:none;border-radius:50px;padding:14px 22px;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 4px 18px rgba(14,165,233,.5);transition:.2s;z-index:50;display:flex;align-items:center;gap:7px}
+.float-btn:hover{transform:scale(1.06)}
+
+/* EMPTY */
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty span{font-size:64px;display:block;margin-bottom:12px}
+
+/* TOAST */
+#toast{position:fixed;top:72px;right:50%;transform:translateX(50%);padding:12px 24px;border-radius:12px;font-size:14px;font-weight:700;z-index:999;display:none;box-shadow:0 4px 18px rgba(0,0,0,.2);animation:slideDown .3s ease;font-family:'Tajawal',sans-serif;max-width:90vw;text-align:center}
+@keyframes slideDown{from{opacity:0;transform:translateX(50%) translateY(-10px)}to{opacity:1;transform:translateX(50%) translateY(0)}}
+.toast-success{background:linear-gradient(135deg,var(--green),var(--green-dark));color:#fff}
+.toast-error{background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff}
+.toast-info{background:linear-gradient(135deg,var(--blue-mid),var(--blue-dark));color:#fff}
+
+/* ADMIN HIDDEN TRIGGER */
+#adminTrigger{position:fixed;bottom:0;left:0;width:50px;height:50px;z-index:49;cursor:pointer;opacity:0}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--border);margin:14px 0}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">🛍️ <span>NAS</span> <span style="color:#fff;-webkit-text-fill-color:#fff">Markets</span></div>
+  <div class="nav-search">
+    <span style="color:rgba(255,255,255,.7)">🔍</span>
+    <input type="text" id="navSearch" placeholder="ابحث عن منتج..." oninput="onSearch(this.value)">
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn active" id="navHome" onclick="showPage('home')">🏠 الرئيسية</button>
+    <button class="nav-btn" id="navAdmin" onclick="goAdmin()" style="display:none">⚙️ المشرف</button>
+  </div>
+</nav>
+
+<!-- PAGES -->
+<div class="page active" id="homePage">
+  <div class="home-wrap" style="padding:16px">
+    <!-- mobile search -->
+    <div class="mobile-search">
+      <input type="text" placeholder="🔍 ابحث عن منتج..." oninput="onSearch(this.value)">
+    </div>
+    <!-- categories -->
+    <div class="cats" id="catsBar"></div>
+    <!-- post box -->
+    <div class="post-box">
+      <div class="post-box-avatar">📦</div>
+      <button class="post-box-btn" onclick="openModal('sellModal')">هل تريد بيع شيء؟ انشر إعلانك الآن...</button>
+    </div>
+    <!-- feed -->
+    <div class="grid" id="feed"></div>
+  </div>
+  <button class="float-btn" onclick="openModal('sellModal')">＋ بيع شيء</button>
+</div>
+
+<div class="page" id="postPage"></div>
+
+<div class="page" id="adminPage">
+  <div class="admin-header">
+    <h2 style="font-size:22px;font-weight:900">🛡️ لوحة تحكم المشرف</h2>
+    <p style="opacity:.8;font-size:13px;margin-top:4px">إدارة الإعلانات والطلبات</p>
+    <div class="stats-grid" id="statsGrid"></div>
+  </div>
+  <div class="admin-tabs">
+    <button class="tab-btn active" onclick="adminTab(this,'pending')">⏳ بانتظار الموافقة</button>
+    <button class="tab-btn" onclick="adminTab(this,'approved')">✅ منشورة</button>
+    <button class="tab-btn" onclick="adminTab(this,'featured')">⭐ مميزة</button>
+  </div>
+  <div id="adminList"></div>
+</div>
+
+<!-- ===== SELL MODAL ===== -->
+<div class="overlay" id="sellModal">
+<div class="modal">
+  <button class="modal-close" onclick="closeModal('sellModal')">✕</button>
+  <h2>📦 نشر إعلان جديد</h2>
+  <div class="steps">
+    <div class="step active" id="step1lbl">① المعلومات</div>
+    <div class="step" id="step2lbl">② الدفع والإرسال</div>
+  </div>
+  <!-- STEP 1 -->
+  <div id="sellStep1">
+    <div class="row2">
+      <div class="form-group">
+        <label>الاسم الكامل *</label>
+        <input id="sName" type="text" placeholder="اسمك">
+      </div>
+      <div class="form-group">
+        <label>رقم الجوال *</label>
+        <input id="sPhone" type="tel" placeholder="46000000">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>عنوان الإعلان *</label>
+      <input id="sTitle" type="text" placeholder="ماذا تبيع؟">
+    </div>
+    <div class="form-group">
+      <label>الوصف</label>
+      <textarea id="sDesc" placeholder="اكتب وصفاً مفصلاً..."></textarea>
+    </div>
+    <div class="row2">
+      <div class="form-group">
+        <label>السعر *</label>
+        <input id="sPrice" type="text" placeholder="500">
+      </div>
+      <div class="form-group">
+        <label>العملة</label>
+        <select id="sCurr">
+          <option>MRU</option><option>USD</option><option>EUR</option>
+          <option>SAR</option><option>MAD</option><option>DZD</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>الفئة</label>
+      <select id="sCat">
+        <option>سيارات</option><option>عقارات</option><option>إلكترونيات</option>
+        <option>هواتف</option><option>ملابس</option><option>أثاث</option>
+        <option>كتب</option><option>رياضة</option><option>أخرى</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>رابط صورة المنتج</label>
+      <input id="sImg" type="url" placeholder="https://..." oninput="previewImg(this.value)">
+      <div class="img-preview" id="imgPreview"><span>📷 معاينة الصورة</span></div>
+    </div>
+    <button class="btn btn-primary btn-full" onclick="goStep2()">التالي ←</button>
+  </div>
+  <!-- STEP 2 -->
+  <div id="sellStep2" style="display:none">
+    <div class="info-blue info-box">
+      <strong>📋 ملخص إعلانك:</strong><br>
+      <span id="summaryText"></span>
+    </div>
+    <div class="info-box" style="background:linear-gradient(135deg,#1e3a8a,#1d4ed8);color:#fff;border:none;border-radius:14px;text-align:center;padding:20px">
+      <div style="font-size:32px;margin-bottom:8px">💳</div>
+      <div style="font-size:16px;font-weight:900">ادفع رسوم النشر</div>
+      <div style="font-size:36px;font-weight:900;margin:8px 0">10 MRU</div>
+      <div style="font-size:14px;opacity:.85">على رقم بنكيلي</div>
+      <div style="font-size:26px;font-weight:900;letter-spacing:2px;margin-top:6px;background:rgba(255,255,255,.2);border-radius:10px;padding:8px">46152629</div>
+    </div>
+    <div class="info-yellow info-box" style="margin-top:12px">
+      ⚠️ احتفظ بإثبات الدفع — سيتم مراجعة إعلانك ونشره خلال 24 ساعة بعد التحقق.
+    </div>
+    <div style="display:flex;gap:10px;margin-top:4px">
+      <button class="btn btn-outline" style="flex:1" onclick="backStep1()">← رجوع</button>
+      <button class="btn btn-primary" style="flex:2" onclick="submitListing()">إرسال للمراجعة 🚀</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- CONTACT MODAL -->
+<div class="overlay" id="contactModal">
+<div class="modal">
+  <button class="modal-close" onclick="closeModal('contactModal')">✕</button>
+  <div id="contactBody"></div>
+</div>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div class="overlay" id="adminLogin">
+<div class="modal">
+  <button class="modal-close" onclick="closeModal('adminLogin')">✕</button>
+  <h2>🔐 دخول المشرف</h2>
+  <div class="form-group">
+    <label>كلمة المرور</label>
+    <input type="password" id="adminPassInput" placeholder="أدخل كلمة المرور" onkeydown="if(event.key==='Enter')checkAdmin()">
+  </div>
+  <button class="btn btn-primary btn-full" onclick="checkAdmin()">دخول</button>
+</div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+<!-- ADMIN TRIGGER (hidden corner) -->
+<div id="adminTrigger" onclick="goAdmin()"></div>
+
+<script>
+// ====== DB ======
+let DB = {listings:[], nextId:1};
+const CATS = ['الكل','سيارات','عقارات','إلكترونيات','هواتف','ملابس','أثاث','كتب','رياضة','أخرى'];
+const CAT_EMOJI = {سيارات:'🚗',عقارات:'🏠',إلكترونيات:'💻',هواتف:'📱',ملابس:'👗',أثاث:'🪑',كتب:'📚',رياضة:'⚽',أخرى:'📦',الكل:'🛍️'};
+let activeCat = 'الكل', searchQ = '', adminLoggedIn = false, curAdminTab = 'pending';
+const ADMIN_PASS = 'nas2024';
+
+// ====== STORAGE ======
+async function loadDB(){
+  try{const r=await window.storage.get('nas_db2');if(r&&r.value)DB=JSON.parse(r.value);else seedData();}
+  catch(e){seedData();}
+}
+async function saveDB(){
+  try{await window.storage.set('nas_db2',JSON.stringify(DB));}catch(e){}
+}
+function seedData(){
+  DB.listings=[
+    {id:1,seller:'أحمد محمد',phone:'46123456',title:'آيفون 14 برو ماكس',desc:'حالة ممتازة، استخدام 4 أشهر، مع الشاحن والصندوق الأصلي، لا خدوش.',price:'1500',curr:'MRU',cat:'هواتف',img:'',status:'approved',featured:true,views:142,date:new Date(Date.now()-3600000).toISOString()},
+    {id:2,seller:'فاطمة سالم',phone:'47654321',title:'طاولة مكتبية خشب طبيعي',desc:'طاولة مكتبية كبيرة من خشب طبيعي، مقاس 160×80 سم، حالة ممتازة.',price:'850',curr:'MRU',cat:'أثاث',img:'',status:'approved',featured:false,views:87,date:new Date(Date.now()-7200000).toISOString()},
+    {id:3,seller:'خالد عمر',phone:'22334455',title:'تويوتا كورولا 2019',desc:'سيارة بحالة جيدة جداً، قطعت 45000 كم فقط، فحص كامل.',price:'280000',curr:'MRU',cat:'سيارات',img:'',status:'approved',featured:false,views:310,date:new Date(Date.now()-86400000).toISOString()},
+    {id:4,seller:'مريم أحمد',phone:'46998877',title:'لابتوب ديل i7',desc:'لابتوب ديل انسبايرون، معالج i7 جيل عاشر، رام 16GB، مثالي للعمل والدراسة.',price:'1200',curr:'MRU',cat:'إلكترونيات',img:'',status:'pending',featured:false,views:0,date:new Date().toISOString()},
+  ];
+  DB.nextId=5;
+  saveDB();
+}
+
+// ====== PAGES ======
+function showPage(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById(p+'Page').classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  const nb=document.getElementById('nav'+p.charAt(0).toUpperCase()+p.slice(1));
+  if(nb)nb.classList.add('active');
+  if(p==='home')renderFeed();
+  if(p==='admin'){renderStats();renderAdminList();}
+}
+
+// ====== CATEGORIES ======
+function renderCats(){
+  document.getElementById('catsBar').innerHTML=CATS.map(c=>`
+    <button class="cat-btn${c===activeCat?' active':''}" onclick="setCat('${c}')">${CAT_EMOJI[c]||'📦'} ${c}</button>`).join('');
+}
+function setCat(c){activeCat=c;renderCats();renderFeed();}
+function onSearch(q){searchQ=q;renderFeed();}
+
+// ====== FEED ======
+function renderFeed(){
+  const c=document.getElementById('feed');
+  let items=DB.listings.filter(l=>l.status==='approved');
+  if(activeCat!=='الكل')items=items.filter(l=>l.cat===activeCat);
+  if(searchQ)items=items.filter(l=>l.title.includes(searchQ)||l.desc.includes(searchQ));
+  items.sort((a,b)=>((b.featured?1:0)-(a.featured?1:0))||new Date(b.date)-new Date(a.date));
+  if(!items.length){c.innerHTML=`<div class="empty" style="grid-column:1/-1"><span>🔍</span><p>لا توجد نتائج</p></div>`;return;}
+  c.innerHTML=items.map(cardHTML).join('');
+}
+
+function cardHTML(l){
+  const em=CAT_EMOJI[l.cat]||'📦';
+  const imgEl=l.img
+    ?`<img src="${esc(l.img)}" alt="${esc(l.title)}" onerror="this.parentElement.innerHTML='<div class=\\'card-img-emoji\\'>${em}</div>'">`
+    :`<div class="card-img-emoji">${em}</div>`;
+  return`<div class="card" onclick="openPost(${l.id})">
+    <div class="card-img-wrap">
+      ${imgEl}
+      <div class="price-badge">💰 ${esc(l.price)} ${esc(l.curr)}</div>
+      ${l.featured?`<div class="featured-badge">⭐ مميز</div>`:''}
+    </div>
+    <div class="card-body">
+      <div class="card-seller-row">
+        <div class="avatar-sm">${l.seller.charAt(0)}</div>
+        <div>
+          <div class="seller-name">${esc(l.seller)}</div>
+          <div class="card-time">${timeAgo(l.date)}</div>
+        </div>
+      </div>
+      <div class="card-title">${esc(l.title)}</div>
+      <div class="card-desc">${esc(l.desc)||'لا يوجد وصف'}</div>
+      <div class="card-footer">
+        <span class="views">👁 ${l.views}</span>
+        <button class="btn btn-primary" onclick="event.stopPropagation();showContact(${l.id})">📞 تواصل</button>
+        <button class="btn btn-outline" onclick="event.stopPropagation();sharePost(${l.id})">🔗</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ====== POST DETAIL ======
+function openPost(id){
+  const l=DB.listings.find(x=>x.id===id);
+  if(!l)return;
+  l.views++;saveDB();
+  const em=CAT_EMOJI[l.cat]||'📦';
+  const imgEl=l.img
+    ?`<img src="${esc(l.img)}" class="post-detail-img" alt="${esc(l.title)}" onerror="this.outerHTML='<div class=\\'post-detail-img-emoji\\'>${em}</div>'">`
+    :`<div class="post-detail-img-emoji">${em}</div>`;
+  document.getElementById('postPage').innerHTML=`
+    <div style="padding:16px;max-width:700px;margin:0 auto">
+      <div class="back-btn" onclick="showPage('home')">← العودة للرئيسية</div>
+      ${imgEl}
+      <div class="detail-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px;margin-bottom:12px">
+          <div>
+            <h1 style="font-size:22px;font-weight:900;margin-bottom:4px">${esc(l.title)}</h1>
+            <span class="badge badge-approved">${esc(l.cat)}</span>
+            ${l.featured?`<span class="badge badge-featured">⭐ مميز</span>`:''}
+          </div>
+          <div class="detail-price">${esc(l.price)} ${esc(l.curr)}</div>
+        </div>
+        <div class="divider"></div>
+        <p style="font-size:15px;line-height:1.7;color:var(--muted);margin-bottom:14px">${esc(l.desc)||'لا يوجد وصف'}</p>
+        <div style="font-size:13px;color:var(--muted)">👁 ${l.views} مشاهدة · 🕐 ${timeAgo(l.date)}</div>
+      </div>
+      <div class="detail-card">
+        <div class="card-seller-row" style="margin-bottom:14px">
+          <div class="avatar-sm" style="width:46px;height:46px;font-size:20px">${l.seller.charAt(0)}</div>
+          <div>
+            <div style="font-size:16px;font-weight:800">${esc(l.seller)}</div>
+            <div style="font-size:13px;color:var(--muted)">البائع</div>
+          </div>
+        </div>
+        <div class="contact-row">
+          <a href="tel:${esc(l.phone)}" class="btn btn-primary">📞 اتصال مباشر</a>
+          <a href="https://wa.me/222${esc(l.phone)}?text=${encodeURIComponent('مرحباً، رأيت إعلانك على NAS Markets: '+l.title+' بسعر '+l.price+' '+l.curr)}" target="_blank" class="btn btn-green">💬 واتساب</a>
+        </div>
+        <div style="font-size:13px;color:var(--muted);margin-top:12px;text-align:center">📱 ${esc(l.phone)}</div>
+      </div>
+    </div>`;
+  showPage('post');
+}
+
+// ====== CONTACT ======
+function showContact(id){
+  const l=DB.listings.find(x=>x.id===id);if(!l)return;
+  document.getElementById('contactBody').innerHTML=`
+    <div style="text-align:center;padding:10px 0">
+      <div style="font-size:64px;margin-bottom:10px">📞</div>
+      <h3 style="margin-bottom:4px">${esc(l.title)}</h3>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:18px">البائع: ${esc(l.seller)}</p>
+      <div style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border-radius:14px;padding:18px;margin-bottom:16px">
+        <p style="font-size:12px;color:var(--muted);margin-bottom:4px">رقم التواصل</p>
+        <p style="font-size:30px;font-weight:900;color:var(--blue-dark);letter-spacing:3px">${esc(l.phone)}</p>
+      </div>
+      <div style="display:flex;gap:10px;justify-content:center">
+        <a href="tel:${esc(l.phone)}" class="btn btn-primary">📞 اتصال</a>
+        <a href="https://wa.me/222${esc(l.phone)}?text=${encodeURIComponent('مرحباً، رأيت إعلانك على NAS Markets: '+l.title+' بسعر '+l.price+' '+l.curr)}" target="_blank" class="btn btn-green">💬 واتساب</a>
+      </div>
+    </div>`;
+  openModal('contactModal');
+}
+
+// ====== SELL ======
+function previewImg(url){
+  const p=document.getElementById('imgPreview');
+  if(url) p.innerHTML=`<img src="${esc(url)}" onerror="this.parentElement.innerHTML='<span>⚠️ تعذر تحميل الصورة</span>'">`;
+  else p.innerHTML='<span>📷 معاينة الصورة</span>';
+}
+function goStep2(){
+  const name=v('sName'),phone=v('sPhone'),title=v('sTitle'),price=v('sPrice');
+  if(!name||!phone||!title||!price){toast('⚠️ يرجى تعبئة الحقول المطلوبة','error');return;}
+  document.getElementById('summaryText').innerHTML=
+    `📦 <b>${esc(title)}</b><br>💰 ${esc(price)} ${v('sCurr')}<br>🏷️ ${v('sCat')}<br>👤 ${esc(name)} · 📱 ${esc(phone)}`;
+  document.getElementById('sellStep1').style.display='none';
+  document.getElementById('sellStep2').style.display='block';
+  document.getElementById('step1lbl').classList.remove('active');
+  document.getElementById('step2lbl').classList.add('active');
+}
+function backStep1(){
+  document.getElementById('sellStep1').style.display='block';
+  document.getElementById('sellStep2').style.display='none';
+  document.getElementById('step1lbl').classList.add('active');
+  document.getElementById('step2lbl').classList.remove('active');
+}
+function submitListing(){
+  const l={id:DB.nextId++,seller:v('sName'),phone:v('sPhone'),title:v('sTitle'),
+    desc:v('sDesc'),price:v('sPrice'),curr:v('sCurr'),cat:v('sCat'),
+    img:v('sImg'),status:'pending',featured:false,views:0,date:new Date().toISOString()};
+  DB.listings.push(l);saveDB();
+  closeModal('sellModal');
+  resetSellForm();
+  // success popup
+  const ov=document.createElement('div');ov.className='overlay open';
+  ov.innerHTML=`<div class="modal"><div class="success-screen">
+    <span class="success-icon">🎉</span>
+    <h2 style="margin-bottom:10px">تم إرسال إعلانك!</h2>
+    <p style="color:var(--muted);line-height:1.8;margin-bottom:20px">سيتم مراجعة إعلانك ونشره بعد التحقق من الدفع.<br>
+    <strong>💳 10 MRU على رقم 46152629 بنكيلي</strong></p>
+    <button class="btn btn-primary btn-full" onclick="this.closest('.overlay').remove()">شكراً! 👍</button>
+  </div></div>`;
+  document.body.appendChild(ov);
+  toast('✅ تم إرسال إعلانك للمراجعة');
+}
+function resetSellForm(){
+  ['sName','sPhone','sTitle','sDesc','sPrice','sImg'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('imgPreview').innerHTML='<span>📷 معاينة الصورة</span>';
+  backStep1();
+}
+
+// ====== SHARE ======
+function sharePost(id){
+  const l=DB.listings.find(x=>x.id===id);if(!l)return;
+  const txt=`🛍️ ${l.title}\n💰 ${l.price} ${l.curr}\n📞 ${l.phone}\n\nعبر NAS Markets`;
+  if(navigator.share)navigator.share({title:l.title,text:txt});
+  else{navigator.clipboard?.writeText(txt);toast('📋 تم نسخ تفاصيل الإعلان');}
+}
+
+// ====== ADMIN ======
+function goAdmin(){
+  if(!adminLoggedIn){openModal('adminLogin');return;}
+  showPage('admin');
+}
+function checkAdmin(){
+  if(document.getElementById('adminPassInput').value===ADMIN_PASS){
+    adminLoggedIn=true;
+    document.getElementById('navAdmin').style.display='';
+    closeModal('adminLogin');
+    showPage('admin');
+    toast('✅ مرحباً بك يا مشرف!');
+  } else toast('❌ كلمة المرور خاطئة','error');
+}
+function adminTab(btn,tab){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');curAdminTab=tab;renderAdminList();
+}
+function renderStats(){
+  const pending=DB.listings.filter(l=>l.status==='pending').length;
+  const approved=DB.listings.filter(l=>l.status==='approved').length;
+  const featured=DB.listings.filter(l=>l.featured).length;
+  const views=DB.listings.reduce((a,l)=>a+l.views,0);
+  document.getElementById('statsGrid').innerHTML=`
+    <div class="stat-card"><div class="stat-num">${pending}</div><div class="stat-lbl">⏳ بانتظار الموافقة</div></div>
+    <div class="stat-card"><div class="stat-num">${approved}</div><div class="stat-lbl">✅ إعلانات نشطة</div></div>
+    <div class="stat-card"><div class="stat-num">${featured}</div><div class="stat-lbl">⭐ إعلانات مميزة</div></div>
+    <div class="stat-card"><div class="stat-num">${views}</div><div class="stat-lbl">👁 إجمالي المشاهدات</div></div>`;
+}
+function renderAdminList(){
+  const c=document.getElementById('adminList');
+  let items=DB.listings.filter(l=>
+    curAdminTab==='pending'?l.status==='pending':
+    curAdminTab==='featured'?l.featured:
+    l.status==='approved');
+  items.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  if(!items.length){c.innerHTML=`<div class="empty"><span>${curAdminTab==='pending'?'✅':'📭'}</span><p>لا توجد عناصر</p></div>`;return;}
+  c.innerHTML=items.map(l=>{
+    const em=CAT_EMOJI[l.cat]||'📦';
+    const imgEl=l.img
+      ?`<img src="${esc(l.img)}" style="width:72px;height:72px;border-radius:10px;object-fit:cover;flex-shrink:0" onerror="this.outerHTML='<div class=\\'admin-list-emoji\\'>${em}</div>'">`
+      :`<div class="admin-list-emoji">${em}</div>`;
+    const actions=curAdminTab==='pending'
+      ?`<button class="btn btn-green" onclick="approve(${l.id})">✅ نشر</button>
+         <button class="btn btn-red" onclick="delListing(${l.id})">🗑️ رفض</button>`
+      :`${l.status==='approved'?`<button class="btn btn-gold" onclick="toggleFeatured(${l.id})">${l.featured?'★ إلغاء التمييز':'⭐ تمييز'}</button>`:``}
+       <button class="btn btn-red" onclick="delListing(${l.id})">🗑️ حذف</button>`;
+    return`<div class="admin-list-card">
+      ${imgEl}
+      <div class="admin-info">
+        <h4>${esc(l.title)} 
+          <span class="badge ${l.status==='pending'?'badge-pending':'badge-approved'}">${l.status==='pending'?'بانتظار':'منشور'}</span>
+          ${l.featured?`<span class="badge badge-featured">⭐</span>`:''}
+        </h4>
+        <p>👤 ${esc(l.seller)} · 📱 ${esc(l.phone)}</p>
+        <p>💰 ${esc(l.price)} ${esc(l.curr)} · 🏷️ ${esc(l.cat)}</p>
+        <p style="margin-top:3px">${esc((l.desc||'').substring(0,60))}${l.desc&&l.desc.length>60?'...':''}</p>
+        <p style="margin-top:3px;font-size:11px;color:var(--muted)">🕐 ${timeAgo(l.date)} · 👁 ${l.views} مشاهدة</p>
+        ${curAdminTab==='pending'?`<p style="margin-top:6px;font-size:12px;background:#fffbeb;padding:4px 8px;border-radius:6px;color:#92400e">⚠️ تحقق من دفع 10 MRU على رقم 46152629</p>`:''}
+      </div>
+      <div class="admin-actions">${actions}</div>
+    </div>`;}).join('');
+}
+function approve(id){
+  const l=DB.listings.find(x=>x.id===id);
+  if(l){l.status='approved';saveDB();renderStats();renderAdminList();renderFeed();toast('✅ تم نشر الإعلان');}
+}
+function delListing(id){
+  if(!confirm('هل أنت متأكد من الحذف؟'))return;
+  DB.listings=DB.listings.filter(x=>x.id!==id);
+  saveDB();renderStats();renderAdminList();renderFeed();toast('🗑️ تم الحذف','info');
+}
+function toggleFeatured(id){
+  const l=DB.listings.find(x=>x.id===id);
+  if(l){l.featured=!l.featured;saveDB();renderStats();renderAdminList();renderFeed();
+    toast(l.featured?'⭐ تم تمييز الإعلان':'★ تم إلغاء التمييز');}
+}
+
+// ====== HELPERS ======
+function openModal(id){document.getElementById(id).classList.add('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+function v(id){return document.getElementById(id)?.value?.trim()||''}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function toast(msg,type='success'){
+  const t=document.getElementById('toast');
+  t.className='toast-'+type;t.textContent=msg;t.style.display='block';
+  clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3800);
+}
+function timeAgo(d){
+  const s=Math.floor((Date.now()-new Date(d))/1000);
+  if(s<60)return 'الآن';if(s<3600)return Math.floor(s/60)+' دقيقة';
+  if(s<86400)return Math.floor(s/3600)+' ساعة';return Math.floor(s/86400)+' يوم';
+}
+
+// close overlay on bg click
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open')}));
+
+// ====== INIT ======
+(async()=>{await loadDB();renderCats();renderFeed();})();
+</script>
+</body>
+        </html>
