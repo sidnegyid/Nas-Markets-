@@ -1,179 +1,1534 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NAS Markets Pro | سيد الابتكار</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
-    <style>
-        /* جميع تنسيقاتك الأصلية مدمجة هنا مع تحسينات طفيفة */
-        :root{--p:#6366f1;--p2:#8b5cf6;--gold:#f59e0b;--ok:#10b981;--err:#ef4444;--bg:#f8fafc;--card:#fff;--txt:#0f172a;--muted:#64748b;--bd:#e2e8f0;}
-        .dark{--bg:#0a0e1a;--card:#141b2d;--txt:#f1f5f9;--muted:#94a3b8;--bd:#1e293b;}
-        *{font-family:'Tajawal',sans-serif;box-sizing:border-box}
-        body{background:var(--bg);color:var(--txt);transition:.4s}
-        .page{display:none}.page.active{display:block;animation:slideUp.5s cubic-bezier(.16,1,.3,1)}
-        @keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-        .glass{background:rgba(255,255,255,.75);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.2)}
-        .btn{padding:.875rem 1.5rem;border-radius:1rem;font-weight:700;transition:all.3s;cursor:pointer;border:none}
-        .btn-p{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff}
-        .card{background:var(--card);border-radius:1.5rem;border:1px solid var(--bd);box-shadow:0 10px 40px -10px rgba(0,0,0,.1)}
-        .badge-verified{background:linear-gradient(135deg,#10b981,#059669);color:#fff;padding:.2rem .5rem;border-radius:99px;font-size:0.7rem}
-        #toast { position:fixed; top:20px; right:20px; z-index:9999; padding:1rem 2rem; border-radius:1rem; color:white; font-weight:bold; transform:translateX(200%); transition:0.5s; }
-        #toast.show { transform:translateX(0); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NAS Markets</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --nav:#0f172a;--bg:#f8fafc;--bg2:#f1f5f9;--card:#fff;
+  --txt:#0f172a;--txt2:#475569;--txt3:#94a3b8;--bdr:#e2e8f0;
+  --acc:#2563eb;--acc2:#1d4ed8;--gold:#f59e0b;--gold2:#d97706;
+  --green:#10b981;--red:#ef4444;--purple:#8b5cf6;
+  --sh:0 1px 6px rgba(15,23,42,.07);--sh2:0 4px 18px rgba(15,23,42,.12);
+}
+[data-dark="1"]{
+  --bg:#0f172a;--bg2:#1e293b;--card:#1e293b;
+  --txt:#f1f5f9;--txt2:#94a3b8;--txt3:#64748b;--bdr:#334155;
+  --nav:#060d1a;--sh:0 1px 6px rgba(0,0,0,.3);--sh2:0 4px 18px rgba(0,0,0,.4);
+}
+body{font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh}
+
+/* NAV */
+nav{background:var(--nav);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;position:sticky;top:0;z-index:200;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.logo{display:flex;align-items:center;gap:8px;cursor:pointer}
+.logo-icon{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--gold),#3b82f6);display:flex;align-items:center;justify-content:center;font-size:16px}
+.logo-name{font-size:15px;font-weight:900;color:#fff}
+.logo-sub{font-size:9px;color:var(--gold);display:block;margin-top:-2px}
+.nav-r{display:flex;align-items:center;gap:6px}
+.nav-ic{width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,255,255,.1);color:#fff;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.nav-ic:hover{background:rgba(255,255,255,.18)}
+.nav-av{width:32px;height:32px;border-radius:50%;border:2px solid var(--gold);cursor:pointer;background:linear-gradient(135deg,var(--acc2),var(--purple));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:13px;overflow:hidden}
+.nav-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+@media(max-width:480px){.logo-name{font-size:13px}}
+
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:0;right:0;background:var(--nav);border-top:1px solid rgba(255,255,255,.07);z-index:100;padding:4px 0 6px;display:flex;justify-content:space-around}
+.bnav-i{display:flex;flex-direction:column;align-items:center;gap:1px;background:none;border:none;cursor:pointer;color:rgba(255,255,255,.4);font-size:10px;font-weight:700;font-family:'Tajawal',sans-serif;padding:4px 10px;border-radius:8px;transition:.15s}
+.bnav-i.on,.bnav-i:hover{color:var(--gold)}
+.bnav-i span:first-child{font-size:19px}
+
+/* PAGES */
+.page{display:none;min-height:calc(100vh - 56px);padding-bottom:70px}
+.page.on{display:block;animation:fu .2s ease}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* LAYOUT */
+.wrap{max-width:680px;margin:0 auto;padding:12px}
+
+/* CARDS */
+.card{background:var(--card);border-radius:14px;border:1px solid var(--bdr);box-shadow:var(--sh)}
+.cp{padding:14px}
+
+/* POST BOX */
+.pbox{background:var(--card);border-radius:14px;border:1px solid var(--bdr);box-shadow:var(--sh);padding:12px;margin-bottom:12px}
+.pbox-row{display:flex;align-items:center;gap:9px}
+.av{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--acc2),var(--purple));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:14px;overflow:hidden}
+.av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.pinp{flex:1;padding:9px 14px;background:var(--bg2);border:1.5px dashed var(--bdr);border-radius:20px;font-family:'Tajawal',sans-serif;font-size:13px;color:var(--txt2);cursor:pointer;text-align:right;transition:.15s}
+.pinp:hover{border-color:var(--acc);color:var(--acc)}
+.pbox-btns{display:flex;gap:4px;margin-top:9px;padding-top:9px;border-top:1px solid var(--bdr)}
+.pbb{flex:1;background:none;border:none;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:11px;font-weight:700;color:var(--txt3);padding:6px 4px;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:3px;transition:.15s}
+.pbb:hover{background:var(--bg2);color:var(--txt)}
+
+/* CATS */
+.cats{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:10px;scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.cat{padding:6px 14px;border-radius:18px;border:1.5px solid var(--bdr);background:var(--card);cursor:pointer;font-family:'Tajawal',sans-serif;font-size:11px;font-weight:800;white-space:nowrap;color:var(--txt2);transition:.15s;box-shadow:var(--sh)}
+.cat:hover,.cat.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+
+/* POST */
+.post{background:var(--card);border-radius:14px;border:1px solid var(--bdr);box-shadow:var(--sh);margin-bottom:10px;overflow:hidden}
+.post-hd{display:flex;align-items:center;gap:8px;padding:11px 13px 0}
+.post-av{width:38px;height:38px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--acc2),var(--purple));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:15px;cursor:pointer;overflow:hidden;position:relative}
+.post-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.vbadge{position:absolute;bottom:0;right:0;background:var(--acc);color:#fff;font-size:7px;width:13px;height:13px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--card)}
+.post-meta{flex:1}
+.post-name{font-size:13px;font-weight:900;color:var(--txt);cursor:pointer;display:flex;align-items:center;gap:4px}
+.post-name:hover{color:var(--acc)}
+.post-sub{font-size:10px;color:var(--txt3)}
+.post-more{background:none;border:none;cursor:pointer;color:var(--txt3);font-size:17px;padding:3px;border-radius:5px}
+.post-more:hover{background:var(--bg2)}
+.post-body{padding:9px 13px}
+.post-txt{font-size:13px;line-height:1.65;color:var(--txt);white-space:pre-wrap;word-break:break-word}
+.htag{font-size:12px;color:var(--acc);font-weight:700;cursor:pointer;background:rgba(37,99,235,.08);padding:1px 6px;border-radius:5px;display:inline-block;margin:2px 1px}
+.htag:hover{background:rgba(37,99,235,.16)}
+.post-img{width:100%;max-height:360px;object-fit:cover}
+.post-price{margin:8px 13px 0;padding:9px 12px;background:var(--bg2);border-radius:9px;border:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.pval{font-size:17px;font-weight:900;color:var(--txt)}
+.pcurr{font-size:11px;color:var(--txt3)}
+.post-acts{display:flex;border-top:1px solid var(--bdr);margin-top:9px}
+.pa{flex:1;display:flex;align-items:center;justify-content:center;gap:4px;padding:9px 4px;background:none;border:none;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:11px;font-weight:700;color:var(--txt3);transition:.15s}
+.pa:hover{background:var(--bg2);color:var(--txt)}
+.pa.liked{color:var(--red)}
+.pa-ic{font-size:15px}
+
+/* PROFS GRID */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.pcard{background:var(--card);border-radius:14px;border:1px solid var(--bdr);box-shadow:var(--sh);padding:14px;cursor:pointer;transition:.2s}
+.pcard:hover{box-shadow:var(--sh2);transform:translateY(-2px)}
+.pcard-av{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#5b21b6,var(--purple));display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;margin-bottom:8px}
+.pcard-name{font-size:14px;font-weight:900;color:var(--txt);margin-bottom:2px}
+.pcard-job{font-size:11px;color:var(--acc);font-weight:700;margin-bottom:4px}
+.pcard-bio{font-size:11px;color:var(--txt3);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:8px}
+.pcard-ft{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--bdr)}
+.stars{display:flex;align-items:center;gap:3px;font-size:11px}
+.s-on{color:var(--gold)}
+.s-off{color:var(--bdr)}
+
+/* PROFILE */
+.pcov{height:140px;background:linear-gradient(135deg,#0f172a,#1d4ed8,#7c3aed);border-radius:14px 14px 0 0;position:relative}
+.pav-wrap{position:absolute;bottom:-32px;right:16px}
+.pav{width:68px;height:68px;border-radius:50%;border:3px solid var(--card);background:linear-gradient(135deg,var(--acc2),var(--purple));display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;font-weight:900;overflow:hidden;position:relative}
+.pav img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.profile-info{padding:42px 16px 14px}
+.pname{font-size:18px;font-weight:900;color:var(--txt);display:flex;align-items:center;gap:6px}
+.phandle{font-size:12px;color:var(--txt3);margin-top:2px}
+.pbio{font-size:12px;color:var(--txt2);margin-top:6px;line-height:1.6}
+.pstats{display:flex;gap:16px;margin-top:10px}
+.pstat-n{font-size:15px;font-weight:900;color:var(--txt)}
+.pstat-l{font-size:10px;color:var(--txt3)}
+.pacts{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
+
+/* ASMA */
+.asma-hd{background:linear-gradient(135deg,#1e1b4b,#4c1d95,#1e3a8a);border-radius:14px;padding:16px;margin-bottom:12px;text-align:center;color:#fff;box-shadow:0 5px 18px rgba(76,29,149,.4)}
+.chat-wrap{background:var(--card);border-radius:14px;border:1px solid var(--bdr);overflow:hidden;display:flex;flex-direction:column;height:430px;box-shadow:var(--sh)}
+.chat-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.msg{max-width:80%;display:flex;flex-direction:column;gap:2px}
+.msg.u{align-self:flex-end;align-items:flex-end}
+.msg.b{align-self:flex-start;align-items:flex-start}
+.bbl{padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.6;word-break:break-word;white-space:pre-wrap}
+.msg.u .bbl{background:linear-gradient(135deg,var(--acc2),var(--acc));color:#fff;border-bottom-left-radius:3px}
+.msg.b .bbl{background:var(--bg2);color:var(--txt);border-bottom-right-radius:3px;border:1px solid var(--bdr)}
+.msg-t{font-size:10px;color:var(--txt3)}
+.chat-ft{display:flex;gap:7px;padding:9px;border-top:1px solid var(--bdr);background:var(--card)}
+.cinp{flex:1;border:1.5px solid var(--bdr);border-radius:20px;padding:8px 13px;font-family:'Tajawal',sans-serif;font-size:13px;color:var(--txt);background:var(--bg2);outline:none}
+.cinp:focus{border-color:var(--purple)}
+.csend{width:36px;height:36px;border-radius:50%;border:none;background:linear-gradient(135deg,#4c1d95,var(--purple));color:#fff;cursor:pointer;font-size:14px;flex-shrink:0}
+.ty span{width:5px;height:5px;border-radius:50%;background:var(--txt3);display:inline-block;animation:bo .9s infinite;margin:0 1px}
+.ty span:nth-child(2){animation-delay:.15s}
+.ty span:nth-child(3){animation-delay:.3s}
+@keyframes bo{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-4px)}}
+
+/* NOTIFS */
+.ni{display:flex;align-items:flex-start;gap:9px;padding:11px 14px;border-bottom:1px solid var(--bdr);cursor:pointer;transition:.15s}
+.ni:hover,.ni.unread{background:rgba(37,99,235,.04)}
+.ni-av{width:36px;height:36px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,var(--acc2),var(--purple));display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px}
+.ni-txt{font-size:12px;color:var(--txt);line-height:1.5}
+.ni-t{font-size:10px;color:var(--txt3);margin-top:1px}
+.ndot{width:7px;height:7px;border-radius:50%;background:var(--acc);flex-shrink:0;margin-top:4px}
+
+/* SETTINGS */
+.ssec{background:var(--card);border-radius:14px;border:1px solid var(--bdr);box-shadow:var(--sh);padding:14px;margin-bottom:11px}
+.ssec h3{font-size:12px;font-weight:900;color:var(--txt);margin-bottom:11px}
+.srow{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bdr)}
+.srow:last-child{border-bottom:none}
+.slbl{font-size:13px;font-weight:700;color:var(--txt)}
+.ssub{font-size:10px;color:var(--txt3);margin-top:1px}
+.tog{position:relative;width:40px;height:22px;flex-shrink:0}
+.tog input{opacity:0;width:0;height:0}
+.tsl{position:absolute;inset:0;background:var(--bdr);border-radius:22px;transition:.2s;cursor:pointer}
+.tsl::before{content:'';position:absolute;width:16px;height:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s}
+.tog input:checked + .tsl{background:var(--acc)}
+.tog input:checked + .tsl::before{transform:translateX(-16px)}
+[dir="ltr"] .tog input:checked + .tsl::before{transform:translateX(16px)}
+[dir="ltr"] .tsl::before{left:auto;right:3px}
+.lpills{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap}
+.lp{padding:5px 12px;border-radius:10px;border:1.5px solid var(--bdr);background:var(--bg2);color:var(--txt2);font-family:'Tajawal',sans-serif;font-size:12px;font-weight:800;cursor:pointer;transition:.15s}
+.lp.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+
+/* ADMIN */
+.adm-hd{background:linear-gradient(135deg,#0f172a,#0d2550);color:#fff;border-radius:14px;padding:16px 18px;margin-bottom:14px;box-shadow:var(--sh2)}
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:11px}
+@media(max-width:500px){.sgrid{grid-template-columns:repeat(2,1fr)}}
+.sc{background:rgba(255,255,255,.09);border-radius:9px;padding:10px;text-align:center}
+.sn{font-size:20px;font-weight:900}
+.sl{font-size:9px;opacity:.6;margin-top:1px}
+.tabs{display:flex;gap:5px;margin-bottom:12px;flex-wrap:wrap}
+.tb{padding:6px 14px;border:none;border-radius:14px;background:var(--card);color:var(--txt2);font-family:'Tajawal',sans-serif;font-size:11px;font-weight:800;cursor:pointer;box-shadow:var(--sh);transition:.15s}
+.tb.on{background:var(--acc);color:#fff}
+.ar{background:var(--card);border-radius:12px;padding:12px;margin-bottom:8px;box-shadow:var(--sh);display:flex;gap:9px;align-items:flex-start;border:1px solid var(--bdr)}
+.ar-img{width:56px;height:56px;border-radius:9px;object-fit:cover;flex-shrink:0;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:22px}
+.ar-inf{flex:1;min-width:0}
+.ar-inf h4{font-size:12px;font-weight:900;margin-bottom:2px;color:var(--txt)}
+.ar-inf p{font-size:11px;color:var(--txt3);margin-bottom:1px}
+.ar-acts{display:flex;gap:4px;flex-direction:column;flex-shrink:0}
+@media(max-width:480px){.ar{flex-wrap:wrap}.ar-acts{flex-direction:row;width:100%}}
+
+/* STAR SELECT */
+.star-wrap{display:flex;gap:5px;justify-content:center;margin:10px 0}
+.ss{font-size:28px;cursor:pointer;opacity:.25;transition:.15s}
+.ss.on{opacity:1;color:var(--gold)}
+
+/* BTNS */
+.btn{padding:8px 16px;border-radius:9px;border:none;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:12px;font-weight:800;transition:.16s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.bp{background:linear-gradient(135deg,var(--acc2),var(--acc));color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.25)}
+.bg{background:linear-gradient(135deg,#059669,var(--green));color:#fff}
+.br{background:linear-gradient(135deg,#dc2626,var(--red));color:#fff}
+.bo{background:linear(135deg,var(--gold2),var(--gold));color:#fff;background:linear-gradient(135deg,var(--gold2),var(--gold))}
+.bou{background:transparent;border:1.5px solid var(--bdr);color:var(--txt)}
+.bou:hover{border-color:var(--acc);color:var(--acc)}
+.bgh{background:var(--bg2);color:var(--txt2);border:1px solid var(--bdr)}
+.bgh:hover{background:var(--bdr)}
+.bpu{background:linear-gradient(135deg,#4c1d95,var(--purple));color:#fff}
+.bfull{width:100%;justify-content:center;padding:11px;font-size:13px;border-radius:11px}
+.bsm{padding:5px 10px;font-size:10px;border-radius:7px}
+
+/* MODAL */
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(3px);z-index:400;align-items:center;justify-content:center;padding:10px}
+.ov.on{display:flex}
+.modal{background:var(--card);border-radius:16px;padding:18px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto;animation:fu .18s ease;box-shadow:0 16px 50px rgba(0,0,0,.4);border:1px solid var(--bdr)}
+.mhd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.mtitle{font-size:15px;font-weight:900;color:var(--txt)}
+.mclose{background:var(--bg2);border:none;width:26px;height:26px;border-radius:50%;cursor:pointer;color:var(--txt2);font-size:12px;display:flex;align-items:center;justify-content:center}
+.mclose:hover{background:var(--bdr)}
+
+/* FORM */
+.fg{margin-bottom:11px}
+label{display:block;font-size:11px;font-weight:800;margin-bottom:4px;color:var(--txt2)}
+input,textarea,select{width:100%;padding:9px 11px;border:1.5px solid var(--bdr);border-radius:9px;font-size:12px;font-family:'Tajawal',sans-serif;outline:none;transition:.16s;color:var(--txt);background:var(--bg2)}
+input:focus,textarea:focus,select:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+textarea{resize:vertical;min-height:65px}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.steps{display:flex;margin-bottom:14px;border-radius:9px;overflow:hidden;border:1.5px solid var(--bdr)}
+.step{flex:1;padding:8px;text-align:center;font-size:11px;font-weight:800;background:var(--bg2);color:var(--txt3)}
+.step.on{background:var(--acc);color:#fff}
+
+/* BADGE */
+.bdg{padding:2px 7px;border-radius:7px;font-size:9px;font-weight:800;display:inline-flex;align-items:center;gap:2px}
+.bdg-b{background:rgba(37,99,235,.1);color:var(--acc);border:1px solid rgba(37,99,235,.2)}
+.bdg-g{background:rgba(16,185,129,.1);color:#059669;border:1px solid rgba(16,185,129,.2)}
+.bdg-r{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+.bdg-o{background:rgba(245,158,11,.1);color:var(--gold2);border:1px solid rgba(245,158,11,.2)}
+
+/* INFO BOXES */
+.ib{padding:9px 11px;border-radius:9px;font-size:11px;line-height:1.7;margin-bottom:10px}
+.ib-b{background:rgba(37,99,235,.07);border-right:3px solid var(--acc)}
+.ib-y{background:rgba(245,158,11,.08);border-right:3px solid var(--gold);color:#92400e}
+[data-dark="1"] .ib-y{color:#fbbf24}
+[dir="ltr"] .ib-b{border-right:none;border-left:3px solid var(--acc)}
+[dir="ltr"] .ib-y{border-right:none;border-left:3px solid var(--gold)}
+
+/* MISC */
+.empty{text-align:center;padding:50px 20px;color:var(--txt3)}
+.eic{font-size:42px;display:block;margin-bottom:10px;opacity:.25}
+.empty p{font-size:13px;font-weight:700}
+.dvd{height:1px;background:var(--bdr);margin:10px 0}
+#toast{position:fixed;top:66px;right:50%;transform:translateX(50%);padding:9px 18px;border-radius:10px;font-size:12px;font-weight:800;z-index:999;display:none;box-shadow:0 4px 14px rgba(0,0,0,.2);animation:tslide .2s ease;font-family:'Tajawal',sans-serif;max-width:90vw;text-align:center}
+@keyframes tslide{from{opacity:0;transform:translateX(50%) translateY(-6px)}to{opacity:1;transform:translateX(50%) translateY(0)}}
+.tok{background:linear-gradient(135deg,#059669,var(--green));color:#fff}
+.terr{background:linear-gradient(135deg,#dc2626,var(--red));color:#fff}
+.tinf{background:linear-gradient(135deg,var(--nav),var(--acc2));color:#fff}
+.tspc{background:linear-gradient(135deg,#4c1d95,var(--purple));color:#fff}
+.spin{width:32px;height:32px;border:3px solid var(--bdr);border-top-color:var(--acc);border-radius:50%;animation:sp .65s linear infinite;margin:40px auto}
+@keyframes sp{to{transform:rotate(360deg)}}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:4px}
+</style>
 </head>
 <body>
 
-<div id="toast"></div>
-
-<nav class="sticky top-0 z-50 glass shadow-xl">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-        <div class="flex items-center gap-4 cursor-pointer" onclick="showPage('feed')">
-            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white font-black text-2xl">N</div>
-            <div class="font-black text-xl">NAS Markets</div>
-        </div>
-        <div class="flex items-center gap-4">
-            <button onclick="showPage('feed')" class="nav-link">الرئيسية</button>
-            <button onclick="showPage('jobs')" class="nav-link">المهن</button>
-            <button onclick="showPage('asma')" class="nav-link">أسماء AI</button>
-            <img id="userAvatar" class="w-11 h-11 rounded-2xl border-2 border-indigo-500 cursor-pointer" onclick="login()">
-        </div>
-    </div>
+<!-- NAV -->
+<nav>
+  <div class="logo" onclick="pg('home')">
+    <div class="logo-icon">🛍️</div>
+    <div><div class="logo-name">NAS Markets</div><div class="logo-sub">by Sidan</div></div>
+  </div>
+  <div class="nav-r">
+    <button class="nav-ic" onclick="pg('notifs')" id="nbtn">🔔</button>
+    <div class="nav-av" id="navav" onclick="navClick()">؟</div>
+  </div>
 </nav>
 
-<main class="max-w-7xl mx-auto p-4">
-    <div id="feedPage" class="page active">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-3xl font-black">السوق الذكي</h2>
-            <button onclick="openPostModal()" class="btn btn-p">انشر إعلان (10 أوقية)</button>
+<!-- BOTTOM NAV -->
+<div class="bnav">
+  <button class="bnav-i on" id="bi-home" onclick="pg('home')"><span>🏠</span><span id="t-home">الرئيسية</span></button>
+  <button class="bnav-i" id="bi-profs" onclick="pg('profs')"><span>👷</span><span id="t-profs">المهن</span></button>
+  <button class="bnav-i" id="bi-sell" onclick="openM('sellModal')"><span>➕</span><span id="t-sell">بيع</span></button>
+  <button class="bnav-i" id="bi-asma" onclick="pg('asma')"><span>✨</span><span>أسماء</span></button>
+  <button class="bnav-i" id="bi-settings" onclick="pg('settings')"><span>⚙️</span><span id="t-settings">الإعدادات</span></button>
+</div>
+
+<!-- ════ HOME ════ -->
+<div class="page on" id="homePage">
+  <div class="wrap">
+    <div class="pbox">
+      <div class="pbox-row">
+        <div class="av" id="pbav">😊</div>
+        <div class="pinp" onclick="openM('sellModal')" id="t-whatsNew">ما الجديد؟ انشر إعلانك الآن...</div>
+      </div>
+      <div class="pbox-btns">
+        <button class="pbb" onclick="openSellCat('سيارات')">🚗 <span id="t-cars">سيارات</span></button>
+        <button class="pbb" onclick="openSellCat('إلكترونيات')">💻 <span id="t-elec">إلكترونيات</span></button>
+        <button class="pbb" onclick="openSellCat('هواتف')">📱 <span id="t-phones">هواتف</span></button>
+        <button class="pbb" onclick="openM('sellModal')">📦 <span id="t-other">أخرى</span></button>
+      </div>
+    </div>
+    <div class="cats" id="catsBar"></div>
+    <div id="feed"><div class="spin"></div></div>
+  </div>
+</div>
+
+<!-- ════ PROFS ════ -->
+<div class="page" id="profsPage">
+  <div class="wrap">
+    <div style="background:linear-gradient(135deg,#3b0764,#5b21b6,#1e3a8a);border-radius:14px;padding:16px 18px;margin-bottom:12px;color:#fff;box-shadow:0 5px 16px rgba(91,33,182,.4)">
+      <h2 style="font-size:17px;font-weight:900;margin-bottom:3px">👷 <span id="t-profsTitle">دليل المهن والحرفيين</span></h2>
+      <p style="opacity:.65;font-size:11px" id="t-profsDesc">ابحث عن الحرفي المناسب أو أضف مهنتك</p>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+      <div style="flex:1;min-width:160px;display:flex;align-items:center;gap:7px;background:var(--card);border:1.5px solid var(--bdr);border-radius:20px;padding:0 12px;box-shadow:var(--sh)">
+        <span style="color:var(--txt3)">🔍</span>
+        <input type="text" id="profSrch" placeholder="ابحث عن مهنة..." oninput="filterProfs()" style="border:none;background:none;padding:8px 0;font-size:12px">
+      </div>
+      <button class="btn bpu" onclick="openM('profModal')">＋ <span id="t-addProf">أضف مهنتك</span></button>
+    </div>
+    <div class="cats" id="profCats"></div>
+    <div style="font-size:11px;color:var(--txt3);margin-bottom:8px" id="profCount"></div>
+    <div class="pgrid" id="profGrid"><div class="spin"></div></div>
+  </div>
+</div>
+
+<!-- ════ PROFILE ════ -->
+<div class="page" id="profilePage">
+  <div class="wrap">
+    <button class="btn bgh bsm" onclick="pg('home')" style="margin-bottom:10px">← <span id="t-back">رجوع</span></button>
+    <div class="card" id="profileCard">
+      <div class="pcov"><div class="pav-wrap"><div class="pav" id="pAvEl">؟</div></div></div>
+      <div class="profile-info" id="profileInfo"></div>
+    </div>
+    <div style="margin-top:12px" id="profileFeed"></div>
+  </div>
+</div>
+
+<!-- ════ ASMA AI ════ -->
+<div class="page" id="asmaPage">
+  <div class="wrap">
+    <div class="asma-hd">
+      <div style="font-size:38px;margin-bottom:6px">✨</div>
+      <div style="font-size:19px;font-weight:900" id="asmaName">أسماء 1</div>
+      <div style="font-size:11px;opacity:.6;margin-top:3px" id="asmaTag">مساعدتك الذكية في السوق</div>
+      <div style="font-size:9px;opacity:.3;margin-top:4px">Powered by Gemini · by Sidan</div>
+    </div>
+    <div class="chat-wrap">
+      <div class="chat-msgs" id="chatMsgs">
+        <div class="msg b">
+          <div class="bbl" id="asmaWelcome">مرحباً! أنا أسماء 1. أخبرني عما تبحث عنه وميزانيتك 😊</div>
+          <div class="msg-t" id="asmaTime"></div>
         </div>
-        <div id="feedGrid" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+      </div>
+      <div class="chat-ft">
+        <input class="cinp" id="chatInp" placeholder="اكتب سؤالك..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}">
+        <button class="csend" onclick="sendChat()">➤</button>
+      </div>
     </div>
+  </div>
+</div>
 
-    <div id="jobsPage" class="page">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-3xl font-black">دليل المهن</h2>
-            <button onclick="openJobModal()" class="btn btn-p">أضف مهنتك (500 أوقية)</button>
+<!-- ════ NOTIFS ════ -->
+<div class="page" id="notifsPage">
+  <div class="wrap">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px">
+      <h2 style="font-size:16px;font-weight:900">🔔 <span id="t-notifs">الإشعارات</span></h2>
+      <button class="btn bgh bsm" onclick="markAllRead()">تحديد كمقروء</button>
+    </div>
+    <div class="card" id="notifList"><div class="empty"><span class="eic">🔔</span><p>لا توجد إشعارات</p></div></div>
+  </div>
+</div>
+
+<!-- ════ SETTINGS ════ -->
+<div class="page" id="settingsPage">
+  <div class="wrap">
+    <h2 style="font-size:16px;font-weight:900;margin-bottom:11px">⚙️ <span id="t-settings2">الإعدادات</span></h2>
+    <div class="ssec">
+      <h3>🎨 <span id="t-appearance">المظهر</span></h3>
+      <div class="srow">
+        <div><div class="slbl" id="t-darkMode">الوضع المظلم</div><div class="ssub" id="t-darkSub">تصميم داكن مريح للعيون</div></div>
+        <label class="tog"><input type="checkbox" id="darkChk" onchange="toggleDark()"><span class="tsl"></span></label>
+      </div>
+    </div>
+    <div class="ssec">
+      <h3>🌐 <span id="t-language">اللغة</span></h3>
+      <div class="lpills">
+        <button class="lp on" id="lAr" onclick="setLang('ar')">العربية</button>
+        <button class="lp" id="lFr" onclick="setLang('fr')">Français</button>
+        <button class="lp" id="lEn" onclick="setLang('en')">English</button>
+      </div>
+    </div>
+    <div class="ssec">
+      <h3>👤 <span id="t-account">الحساب</span></h3>
+      <div id="accSettings"><button class="btn bp bfull" onclick="openM('authModal')">🔑 <span id="t-login">تسجيل الدخول</span></button></div>
+    </div>
+    <div class="ssec">
+      <h3>ℹ️ <span id="t-about">حول التطبيق</span></h3>
+      <div class="srow"><div><div class="slbl">NAS Markets</div><div class="ssub">v4.0 · <span id="t-devBy">طُوِّر بواسطة سيدن</span></div></div><span style="font-size:20px">🛍️</span></div>
+      <div class="srow"><div><div class="slbl" id="t-adminAccess">لوحة المشرف</div></div><button class="btn bgh bsm" onclick="goAdmin()">🛡️</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ ADMIN ════ -->
+<div class="page" id="adminPage">
+  <div class="wrap">
+    <div class="adm-hd">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
+        <div>
+          <h2 style="font-size:17px;font-weight:900;margin-bottom:2px">🛡️ لوحة التحكم</h2>
+          <p style="opacity:.55;font-size:11px">إدارة الإعلانات والمهن</p>
         </div>
-        <div id="jobsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+        <div id="dbSt" style="font-size:11px;font-weight:800;color:#4ade80;background:rgba(255,255,255,.08);padding:5px 11px;border-radius:8px">🟢 متصل</div>
+      </div>
+      <div class="sgrid" id="statsGrid"></div>
     </div>
-
-    <div id="asmaPage" class="page">
-        <div class="card p-6 h-[500px] flex flex-col">
-            <div id="chatBox" class="flex-1 overflow-y-auto mb-4 space-y-3"></div>
-            <div class="flex gap-2">
-                <input id="chatInput" class="flex-1 p-3 border rounded-xl" placeholder="اسأل أسماء...">
-                <button onclick="sendToAsma()" class="btn btn-p">إرسال</button>
-            </div>
-        </div>
+    <div class="tabs">
+      <button class="tb on" onclick="aTab(this,'pending')">⏳ معلقة</button>
+      <button class="tb" onclick="aTab(this,'approved')">✅ منشورة</button>
+      <button class="tb" onclick="aTab(this,'featured')">⭐ مميزة</button>
+      <button class="tb" onclick="aTab(this,'profs')">👷 المهن</button>
     </div>
+    <div id="adminList"></div>
+  </div>
+</div>
 
-    <div id="adminPage" class="page">
-        <h2 class="text-3xl font-black mb-6">لوحة التحكم</h2>
-        <div id="adminList" class="space-y-4"></div>
+<!-- ════ POST DETAIL ════ -->
+<div class="page" id="postPage">
+  <div class="wrap" id="postContent"></div>
+</div>
+
+<!-- ══════ MODALS ══════ -->
+
+<!-- AUTH -->
+<div class="ov" id="authModal">
+<div class="modal" style="max-width:340px">
+  <div class="mhd"><div class="mtitle">🔑 <span id="t-loginOrReg">تسجيل الدخول</span></div><button class="mclose" onclick="closeM('authModal')">✕</button></div>
+  <div class="fg"><label id="t-email2">البريد الإلكتروني</label><input type="email" id="aEmail" placeholder="you@example.com"></div>
+  <div class="fg"><label id="t-pwd2">كلمة المرور</label><input type="password" id="aPwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')emailAuth()"></div>
+  <div style="display:flex;gap:7px">
+    <button class="btn bp bfull" onclick="emailAuth()" id="t-loginBtn">تسجيل الدخول</button>
+    <button class="btn bou bfull" onclick="emailReg()" id="t-regBtn">إنشاء حساب</button>
+  </div>
+</div>
+</div>
+
+<!-- SELL -->
+<div class="ov" id="sellModal">
+<div class="modal">
+  <div class="mhd"><div class="mtitle">📦 <span id="t-newPost">نشر إعلان جديد</span></div><button class="mclose" onclick="closeM('sellModal')">✕</button></div>
+  <div class="steps"><div class="step on" id="s1">① <span id="t-sinfo">المعلومات</span></div><div class="step" id="s2">② <span id="t-spay">الدفع</span></div></div>
+  <div id="sellS1">
+    <div class="r2">
+      <div class="fg"><label id="t-sname">اسم البائع *</label><input id="sName" type="text"></div>
+      <div class="fg"><label id="t-sphone">الجوال *</label><input id="sPhone" type="tel"></div>
     </div>
-</main>
+    <div class="fg"><label id="t-stitle">العنوان *</label><input id="sTitle" type="text"></div>
+    <div class="fg">
+      <label id="t-sdesc">الوصف</label>
+      <textarea id="sDesc" placeholder="#هاشتاق مدعوم..."></textarea>
+      <button onclick="aiDescribe()" class="btn bpu bsm" style="margin-top:4px">✨ <span id="t-aiWrite">كتابة بـ Gemini</span></button>
+    </div>
+    <div class="r2">
+      <div class="fg"><label id="t-sprice">السعر *</label><input id="sPrice" type="number"></div>
+      <div class="fg"><label id="t-scurr">العملة</label><select id="sCurr"><option>MRU</option><option>USD</option><option>EUR</option><option>SAR</option></select></div>
+    </div>
+    <div class="fg"><label id="t-scat">الفئة</label>
+      <select id="sCat"><option>سيارات</option><option>عقارات</option><option>إلكترونيات</option><option>هواتف</option><option>ملابس</option><option>أثاث</option><option>كتب</option><option>رياضة</option><option>أخرى</option></select>
+    </div>
+    <div class="fg"><label id="t-simg">رابط الصورة <span style="font-size:9px;color:var(--txt3)" id="t-simgnote">(مؤقتاً)</span></label>
+      <input id="sImg" type="url" placeholder="https://..." oninput="prvImg(this.value)">
+      <div id="imgPrv" style="width:100%;height:110px;border-radius:8px;background:var(--bg2);border:2px dashed var(--bdr);display:flex;align-items:center;justify-content:center;color:var(--txt3);font-size:11px;overflow:hidden;margin-top:5px"><span id="t-imgprev">معاينة الصورة</span></div>
+    </div>
+    <button class="btn bp bfull" onclick="sellNext()" id="t-next">التالي →</button>
+  </div>
+  <div id="sellS2" style="display:none">
+    <div class="ib ib-b"><b id="t-summary">ملخص:</b> <span id="sellSum"></span></div>
+    <div style="background:linear-gradient(135deg,#0f172a,#0d2550);color:#fff;border-radius:11px;text-align:center;padding:16px;margin-bottom:10px">
+      <div style="font-size:26px;margin-bottom:6px">💳</div>
+      <div style="font-size:12px;font-weight:800;opacity:.7" id="t-payfee">ادفع رسوم النشر</div>
+      <div style="font-size:32px;font-weight:900;margin:6px 0">10 MRU</div>
+      <div style="font-size:10px;opacity:.55" id="t-bankily">على رقم بنكيلي</div>
+      <div style="font-size:22px;font-weight:900;letter-spacing:2px;margin-top:5px;background:rgba(255,255,255,.12);border-radius:8px;padding:6px">46152629</div>
+    </div>
+    <div class="ib ib-y">⚠️ <span id="t-paynote">احتفظ بإثبات الدفع — سيُنشر إعلانك خلال 24 ساعة.</span></div>
+    <div style="display:flex;gap:7px">
+      <button class="btn bou" style="flex:1" onclick="sellBack()" id="t-back2">← رجوع</button>
+      <button class="btn bp" style="flex:2" onclick="submitSell()" id="t-submit">إرسال للمراجعة 🚀</button>
+    </div>
+  </div>
+</div>
+</div>
 
-<script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, where, orderBy, onSnapshot, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+<!-- PROF MODAL -->
+<div class="ov" id="profModal">
+<div class="modal">
+  <div class="mhd"><div class="mtitle">👷 <span id="t-addProfTitle">إضافة مهنة</span></div><button class="mclose" onclick="closeM('profModal')">✕</button></div>
+  <div id="profS1">
+    <div class="r2">
+      <div class="fg"><label>👤 الاسم *</label><input id="pName" type="text"></div>
+      <div class="fg"><label>📱 الجوال *</label><input id="pPhone" type="tel"></div>
+    </div>
+    <div class="fg"><label>🔨 المهنة *</label><input id="pJob" type="text"></div>
+    <div class="fg"><label>🏷️ النوع</label>
+      <select id="pCat"><option>كهرباء</option><option>سباكة</option><option>بناء</option><option>نجارة</option><option>دهان</option><option>تقنية</option><option>تعليم</option><option>طبخ</option><option>خياطة</option><option>أخرى</option></select>
+    </div>
+    <div class="fg"><label>📍 المدينة</label><input id="pCity" type="text" placeholder="نواكشوط"></div>
+    <div class="fg"><label>💬 خبرتك</label><textarea id="pBio"></textarea></div>
+    <button class="btn bp bfull" onclick="profNext()">التالي →</button>
+  </div>
+  <div id="profS2" style="display:none">
+    <div class="ib ib-b"><b>ملخص:</b> <span id="profSum"></span></div>
+    <div style="background:linear-gradient(135deg,#3b0764,#5b21b6);color:#fff;border-radius:11px;text-align:center;padding:16px;margin-bottom:10px">
+      <div style="font-size:24px;margin-bottom:5px">💳</div>
+      <div style="font-size:12px;font-weight:800;opacity:.7">رسوم التسجيل</div>
+      <div style="font-size:28px;font-weight:900;margin:6px 0">500 <span style="font-size:11px;opacity:.6">أوقية</span></div>
+      <div style="font-size:10px;opacity:.55">على رقم بنكيلي</div>
+      <div style="font-size:20px;font-weight:900;letter-spacing:2px;margin-top:5px;background:rgba(255,255,255,.12);border-radius:8px;padding:6px">46152629</div>
+    </div>
+    <div class="ib ib-y">⚠️ احتفظ بإثبات الدفع — سيتم مراجعة طلبك خلال 24 ساعة.</div>
+    <div style="display:flex;gap:7px">
+      <button class="btn bou" style="flex:1" onclick="profBack()">← رجوع</button>
+      <button class="btn bpu" style="flex:2" onclick="submitProf()">إرسال 🚀</button>
+    </div>
+  </div>
+</div>
+</div>
 
-    // الإعدادات مدمجة
-    const GEMINI_KEY = 'AIzaSyC7y3nM5rqXBKSDiA_OHlIz1M3PVd3XABs';
-    const MY_PHONE = '33300817'; 
-    const firebaseConfig = { apiKey: "AIzaSyAcJUNqUCKaXRct1_2zYFeRtpkyofFoGLQ", authDomain: "nas-market.firebaseapp.com", projectId: "nas-market" };
+<!-- RATING -->
+<div class="ov" id="ratingModal">
+<div class="modal" style="max-width:320px">
+  <div class="mhd"><div class="mtitle">⭐ تقييم البائع</div><button class="mclose" onclick="closeM('ratingModal')">✕</button></div>
+  <p style="text-align:center;color:var(--txt2);font-size:12px;margin-bottom:10px" id="ratingFor"></p>
+  <div class="star-wrap">
+    <span class="ss" onclick="setStar(1)" onmouseover="hvStar(1)" onmouseout="rstStar()">★</span>
+    <span class="ss" onclick="setStar(2)" onmouseover="hvStar(2)" onmouseout="rstStar()">★</span>
+    <span class="ss" onclick="setStar(3)" onmouseover="hvStar(3)" onmouseout="rstStar()">★</span>
+    <span class="ss" onclick="setStar(4)" onmouseover="hvStar(4)" onmouseout="rstStar()">★</span>
+    <span class="ss" onclick="setStar(5)" onmouseover="hvStar(5)" onmouseout="rstStar()">★</span>
+  </div>
+  <div class="fg"><label>تعليقك (اختياري)</label><textarea id="rCmt" style="min-height:55px"></textarea></div>
+  <button class="btn bo bfull" onclick="submitRating()" style="background:linear-gradient(135deg,var(--gold2),var(--gold))">إرسال التقييم ⭐</button>
+</div>
+</div>
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const auth = getAuth(app);
+<!-- ADMIN LOGIN -->
+<div class="ov" id="adminLogin">
+<div class="modal" style="max-width:300px">
+  <div class="mhd"><div class="mtitle">🛡️ دخول المشرف</div><button class="mclose" onclick="closeM('adminLogin')">✕</button></div>
+  <div class="fg"><label>🔐 كلمة المرور</label><input type="password" id="adminPwd" onkeydown="if(event.key==='Enter')checkAdmin()"></div>
+  <button class="btn bp bfull" onclick="checkAdmin()">دخول</button>
+</div>
+</div>
 
-    let currentUser = null;
+<div id="toast"></div>
 
-    // --- وظائف التنبيه ---
-    window.toast = (m, type='ok') => {
-        const t = document.getElementById('toast');
-        t.innerText = m; t.style.backgroundColor = type==='ok'?'#10b981':'#ef4444';
-        t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 3000);
-    };
+<script>
+// ══════════════════════════════════════════
+//  FIREBASE REST API — NO CDN NEEDED
+// ══════════════════════════════════════════
+const PROJ = "nas-market";
+const AKEY = "AIzaSyAcJUNqUCKaXRct1_2zYFeRtpkyofFoGLQ";
+const GK   = "AIzaSyC7y3nM5rqXBKSDiA_OHlIz1M3PVd3XABs";
+const FS   = `https://firestore.googleapis.com/v1/projects/${PROJ}/databases/(default)/documents`;
+const AUTH = `https://identitytoolkit.googleapis.com/v1/accounts`;
+const ADMIN_PASSES = {nas2024:'normal', Esme:'esma'};
 
-    // --- نظام الدخول ---
-    window.login = async () => {
-        const provider = new GoogleAuthProvider();
-        try { const r = await signInWithPopup(auth, provider); toast(`أهلاً ${r.user.displayName}`); } 
-        catch(e) { toast("خطأ في الدخول", 'err'); }
-    };
+// ── AUTH STATE ──
+let CU = null; // current user {uid, email, name, photo}
+let CATS_LIST = ['الكل','سيارات','عقارات','إلكترونيات','هواتف','ملابس','أثاث','كتب','رياضة','أخرى'];
+let CE = {سيارات:'🚗',عقارات:'🏠',إلكترونيات:'💻',هواتف:'📱',ملابس:'👗',أثاث:'🪑',كتب:'📚',رياضة:'⚽',أخرى:'📦',الكل:'🛍️'};
+let PCATS = ['الكل','كهرباء','سباكة','بناء','نجارة','دهان','تقنية','تعليم','طبخ','خياطة','أخرى'];
+let PE = {كهرباء:'⚡',سباكة:'🔧',بناء:'🏗️',نجارة:'🪵',دهان:'🎨',تقنية:'💻',تعليم:'📚',طبخ:'🍳',خياطة:'🧵',أخرى:'🔨'};
 
-    onAuthStateChanged(auth, u => { 
-        currentUser = u; 
-        if(u) document.getElementById('userAvatar').src = u.photoURL;
-    });
+let listings=[], profs=[], notifs=[];
+let activeCat='الكل', activePCat='الكل', srchQ='', profQ='';
+let adminOn=false, curAdminTab='pending';
+let starPick=0, ratingLid='';
+let lang=localStorage.getItem('nas_lang')||'ar';
+let dark=localStorage.getItem('nas_dark')==='1';
+let pollTimer=null;
 
-    // --- خوارزمية عرض المنتجات (ترتيب الموثقين أولاً) ---
-    function renderFeed(listings) {
-        const grid = document.getElementById('feedGrid');
-        // ترتيب: الموثقين أولاً، ثم حسب التاريخ
-        const sorted = listings.sort((a, b) => (b.isVerified === a.isVerified) ? b.createdAt - a.createdAt : b.isVerified ? 1 : -1);
-        grid.innerHTML = sorted.map(l => `
-            <div class="card p-4">
-                <img src="${l.img || 'https://via.placeholder.com/150'}" class="rounded-xl h-40 w-full object-cover mb-3">
-                <h3 class="font-bold">${l.title} ${l.isVerified ? '<span class="badge-verified">موثق ✓</span>' : ''}</h3>
-                <p class="text-indigo-600 font-black">${l.price} MRU</p>
-                <a href="https://wa.me/${l.phone}" class="block text-center mt-3 p-2 bg-green-500 text-white rounded-lg">واتساب</a>
-            </div>
-        `).join('');
+// ── TRANSLATIONS ──
+const TT = {
+  ar:{home:'الرئيسية',profs:'المهن',sell:'بيع',settings:'الإعدادات',notifs:'الإشعارات',
+    whatsNew:'ما الجديد؟ انشر إعلانك الآن...',cars:'سيارات',elec:'إلكترونيات',phones:'هواتف',other:'أخرى',
+    appearance:'المظهر',darkMode:'الوضع المظلم',darkSub:'تصميم داكن',language:'اللغة',
+    account:'الحساب',about:'حول التطبيق',devBy:'طُوِّر بواسطة سيدن',adminAccess:'لوحة المشرف',
+    loginOrReg:'تسجيل الدخول',email:'البريد الإلكتروني',pwd:'كلمة المرور',
+    loginBtn:'تسجيل الدخول',regBtn:'إنشاء حساب',
+    newPost:'نشر إعلان جديد',sinfo:'المعلومات',spay:'الدفع',
+    sname:'اسم البائع *',sphone:'الجوال *',stitle:'العنوان *',sdesc:'الوصف',sprice:'السعر *',
+    scurr:'العملة',scat:'الفئة',simg:'رابط الصورة',simgnote:'(مؤقتاً)',imgprev:'معاينة الصورة',
+    aiWrite:'كتابة بـ Gemini',next:'التالي →',back:'← رجوع',back2:'← رجوع',
+    summary:'ملخص:',payfee:'ادفع رسوم النشر',bankily:'على رقم بنكيلي',
+    paynote:'احتفظ بإثبات الدفع — سيُنشر خلال 24 ساعة.',submit:'إرسال للمراجعة 🚀',
+    addProf:'أضف مهنتك',addProfTitle:'إضافة مهنة',profsTitle:'دليل المهن والحرفيين',
+    profsDesc:'ابحث عن الحرفي المناسب أو أضف مهنتك',settings2:'الإعدادات',
+  },
+  fr:{home:'Accueil',profs:'Métiers',sell:'Vendre',settings:'Paramètres',notifs:'Notifications',
+    whatsNew:'Quoi de neuf? Publiez maintenant...',cars:'Voitures',elec:'Électronique',phones:'Téléphones',other:'Autres',
+    appearance:'Apparence',darkMode:'Mode sombre',darkSub:'Thème sombre',language:'Langue',
+    account:'Compte',about:'À propos',devBy:'Développé par Sidan',adminAccess:'Admin',
+    loginOrReg:'Connexion',email:'E-mail',pwd:'Mot de passe',loginBtn:'Connexion',regBtn:'Créer compte',
+    newPost:'Nouvelle annonce',sinfo:'Infos',spay:'Paiement',
+    sname:'Nom vendeur *',sphone:'Téléphone *',stitle:'Titre *',sdesc:'Description',sprice:'Prix *',
+    scurr:'Devise',scat:'Catégorie',simg:'URL image',simgnote:'(temporaire)',imgprev:'Aperçu',
+    aiWrite:'Écrire avec Gemini',next:'Suivant →',back:'← Retour',back2:'← Retour',
+    summary:'Résumé:',payfee:'Frais de publication',bankily:'Sur Bankily',
+    paynote:'Conservez la preuve — publié sous 24h.',submit:'Envoyer 🚀',
+    addProf:'Ajouter métier',addProfTitle:'Ajouter un métier',profsTitle:'Répertoire Métiers',
+    profsDesc:'Trouvez un artisan ou ajoutez votre métier',settings2:'Paramètres',
+  },
+  en:{home:'Home',profs:'Jobs',sell:'Sell',settings:'Settings',notifs:'Notifications',
+    whatsNew:"What's new? Post now...",cars:'Cars',elec:'Electronics',phones:'Phones',other:'Other',
+    appearance:'Appearance',darkMode:'Dark Mode',darkSub:'Dark theme',language:'Language',
+    account:'Account',about:'About',devBy:'Developed by Sidan',adminAccess:'Admin Panel',
+    loginOrReg:'Login',email:'Email',pwd:'Password',loginBtn:'Login',regBtn:'Register',
+    newPost:'New Listing',sinfo:'Info',spay:'Payment',
+    sname:'Seller Name *',sphone:'Phone *',stitle:'Title *',sdesc:'Description',sprice:'Price *',
+    scurr:'Currency',scat:'Category',simg:'Image URL',simgnote:'(temporary)',imgprev:'Image preview',
+    aiWrite:'Write with Gemini',next:'Next →',back:'← Back',back2:'← Back',
+    summary:'Summary:',payfee:'Pay publishing fee',bankily:'On Bankily number',
+    paynote:'Keep payment proof — published within 24h.',submit:'Submit 🚀',
+    addProf:'Add Profession',addProfTitle:'Add Profession',profsTitle:'Professionals Directory',
+    profsDesc:'Find a professional or list your skill',settings2:'Settings',
+  }
+};
+
+function t(k){ return (TT[lang]||TT.ar)[k]||k; }
+
+// ── APPLY LANG/DARK ──
+function applyLang(){
+  const dir = lang==='ar'?'rtl':'ltr';
+  document.documentElement.lang=lang;
+  document.documentElement.dir=dir;
+  // Update all t-* elements
+  document.querySelectorAll('[id^="t-"]').forEach(el=>{
+    const k = el.id.replace('t-','');
+    const v = t(k);
+    if(v!==k) el.textContent=v;
+  });
+  // Asma
+  const an=document.getElementById('asmaName'),at=document.getElementById('asmaTag'),aw=document.getElementById('asmaWelcome');
+  if(lang==='fr'){
+    if(an)an.textContent='Asmaa 1';
+    if(at)at.textContent='Votre assistante intelligente du marché';
+    if(aw)aw.textContent='Bonjour! Je suis Asmaa 1. Dites-moi ce que vous cherchez 😊';
+  } else if(lang==='en'){
+    if(an)an.textContent='Asma 1';
+    if(at)at.textContent='Your smart market assistant';
+    if(aw)aw.textContent="Hello! I'm Asma 1. Tell me what you need 😊";
+  } else {
+    if(an)an.textContent='أسماء 1';
+    if(at)at.textContent='مساعدتك الذكية في السوق';
+    if(aw)aw.textContent='مرحباً! أنا أسماء 1. أخبرني عما تبحث عنه وميزانيتك 😊';
+  }
+  const ci=document.getElementById('chatInp');
+  if(ci)ci.placeholder=lang==='fr'?'Posez votre question...':lang==='en'?'Ask anything...':'اكتب سؤالك...';
+  const ps=document.getElementById('profSrch');
+  if(ps)ps.placeholder=lang==='fr'?'Rechercher...':lang==='en'?'Search...':'ابحث عن مهنة...';
+  ['ar','fr','en'].forEach(l=>{
+    const el=document.getElementById('l'+l.charAt(0).toUpperCase()+l.slice(1));
+    if(el)el.classList.toggle('on',l===lang);
+  });
+  renderCats(); renderPCats(); renderFeed(); renderProfs();
+}
+function applyDark(){
+  document.documentElement.setAttribute('data-dark',dark?'1':'0');
+  const c=document.getElementById('darkChk'); if(c)c.checked=dark;
+}
+function setLang(l){ lang=l; localStorage.setItem('nas_lang',l); applyLang(); }
+function toggleDark(){ dark=!dark; localStorage.setItem('nas_dark',dark?'1':'0'); applyDark(); }
+
+// ══════════════════
+//  FIRESTORE REST
+// ══════════════════
+function toFS(v){
+  if(v===null||v===undefined)return{nullValue:null};
+  if(typeof v==='boolean')return{booleanValue:v};
+  if(typeof v==='number')return Number.isInteger(v)?{integerValue:String(v)}:{doubleValue:v};
+  if(typeof v==='string')return{stringValue:v};
+  if(v instanceof Date)return{timestampValue:v.toISOString()};
+  if(v&&v._ts)return{timestampValue:new Date().toISOString()};
+  if(Array.isArray(v))return{arrayValue:{values:v.map(toFS)}};
+  if(typeof v==='object'){
+    const f={};Object.entries(v).forEach(([k,vv])=>{f[k]=toFS(vv);});
+    return{mapValue:{fields:f}};
+  }
+  return{stringValue:String(v)};
+}
+function fromFS(v){
+  if(!v)return null;
+  if('nullValue'in v)return null;
+  if('booleanValue'in v)return v.booleanValue;
+  if('integerValue'in v)return parseInt(v.integerValue);
+  if('doubleValue'in v)return v.doubleValue;
+  if('stringValue'in v)return v.stringValue;
+  if('timestampValue'in v)return new Date(v.timestampValue);
+  if('arrayValue'in v)return(v.arrayValue.values||[]).map(fromFS);
+  if('mapValue'in v){
+    const o={};Object.entries(v.mapValue.fields||{}).forEach(([k,vv])=>{o[k]=fromFS(vv);});
+    return o;
+  }
+  return null;
+}
+function docToObj(d){
+  if(!d||!d.name)return null;
+  const id=d.name.split('/').pop();
+  const o={id};
+  Object.entries(d.fields||{}).forEach(([k,v])=>{o[k]=fromFS(v);});
+  return o;
+}
+function objToFields(o){
+  const f={};
+  Object.entries(o).forEach(([k,v])=>{
+    if(v&&v._ts){f[k]={timestampValue:new Date().toISOString()};return;}
+    if(v&&v._inc!==undefined)return;
+    f[k]=toFS(v);
+  });
+  return f;
+}
+const sts=()=>({_ts:true});
+
+async function fsGet(col, id){
+  const r=await fetch(`${FS}/${col}/${id}?key=${AKEY}`);
+  const d=await r.json();
+  if(d.error)return null;
+  return docToObj(d);
+}
+async function fsList(col){
+  const r=await fetch(`${FS}/${col}?key=${AKEY}&pageSize=200`);
+  const d=await r.json();
+  return(d.documents||[]).map(docToObj).filter(Boolean);
+}
+async function fsQuery(col, field, op, val){
+  const opMap={'==':'EQUAL','<':'LESS_THAN','<=':'LESS_THAN_OR_EQUAL','>':'GREATER_THAN','>=':'GREATER_THAN_OR_EQUAL'};
+  const body={structuredQuery:{
+    from:[{collectionId:col}],
+    where:{fieldFilter:{field:{fieldPath:field},op:opMap[op]||'EQUAL',value:toFS(val)}}
+  }};
+  const r=await fetch(`${FS}:runQuery?key=${AKEY}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const d=await r.json();
+  return(Array.isArray(d)?d:[]).filter(x=>x.document).map(x=>docToObj(x.document)).filter(Boolean);
+}
+async function fsAdd(col, data){
+  const body={fields:objToFields(data)};
+  const r=await fetch(`${FS}/${col}?key=${AKEY}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const d=await r.json();
+  return d.name?.split('/').pop();
+}
+async function fsSet(col, id, data){
+  const body={fields:objToFields(data)};
+  await fetch(`${FS}/${col}/${id}?key=${AKEY}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+}
+async function fsUpdate(col, id, data){
+  // Handle increments
+  const inc=Object.entries(data).filter(([k,v])=>v&&v._inc!==undefined);
+  const norm=Object.fromEntries(Object.entries(data).filter(([k,v])=>!(v&&v._inc!==undefined)));
+  if(Object.keys(norm).length){
+    const fields=objToFields(norm);
+    const mask=Object.keys(fields).map(k=>`updateMask.fieldPaths=${encodeURIComponent(k)}`).join('&');
+    await fetch(`${FS}/${col}/${id}?key=${AKEY}&${mask}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({fields})});
+  }
+  for(const[k,v]of inc){
+    const cur=await fsGet(col,id);
+    const old=cur?.[k]||0;
+    const newVal=old+v._inc;
+    const f={};f[k]=toFS(newVal);
+    await fetch(`${FS}/${col}/${id}?key=${AKEY}&updateMask.fieldPaths=${k}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({fields:f})});
+  }
+}
+async function fsDel(col, id){
+  await fetch(`${FS}/${col}/${id}?key=${AKEY}`,{method:'DELETE'});
+}
+const inc=n=>({_inc:n});
+
+// ══════════════════
+//  AUTH REST
+// ══════════════════
+async function authFetch(ep, body){
+  const r=await fetch(`${AUTH}:${ep}?key=${AKEY}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  return r.json();
+}
+async function emailAuth(){
+  const em=V('aEmail'),pw=V('aPwd');
+  if(!em||!pw){toast('⚠️ أكمل البيانات','err');return;}
+  const d=await authFetch('signInWithPassword',{email:em,password:pw,returnSecureToken:true});
+  if(d.error){toast('❌ '+(d.error.message||'خطأ'),'err');return;}
+  loginUser({uid:d.localId,email:d.email,name:d.displayName||em.split('@')[0],photo:''});
+  toast('✅ '+(lang==='fr'?'Connecté!':lang==='en'?'Logged in!':'مرحباً!'));
+}
+async function emailReg(){
+  const em=V('aEmail'),pw=V('aPwd');
+  if(!em||!pw){toast('⚠️ أكمل البيانات','err');return;}
+  if(pw.length<6){toast('⚠️ كلمة المرور 6 أحرف على الأقل','err');return;}
+  const d=await authFetch('signUp',{email:em,password:pw,returnSecureToken:true});
+  if(d.error){toast('❌ '+(d.error.message||'خطأ'),'err');return;}
+  const u={uid:d.localId,email:d.email,name:em.split('@')[0],photo:''};
+  await fsSet('users',u.uid,{name:u.name,email:u.email,photo:'',handle:'@'+Math.random().toString(36).slice(2,8),bio:'',followers:0,following:0,posts:0,verified:false,joined:sts()});
+  loginUser(u);
+  toast('✅ '+(lang==='fr'?'Compte créé!':lang==='en'?'Account created!':'تم إنشاء الحساب!'));
+}
+function loginUser(u){
+  CU=u;
+  localStorage.setItem('nas_uid',u.uid);
+  localStorage.setItem('nas_email',u.email);
+  localStorage.setItem('nas_name',u.name);
+  closeM('authModal');
+  updateNavUI();
+  loadNotifs();
+}
+function doSignOut(){
+  CU=null;
+  ['nas_uid','nas_email','nas_name','nas_photo'].forEach(k=>localStorage.removeItem(k));
+  updateNavUI();
+  toast((lang==='fr'?'Déconnecté':lang==='en'?'Logged out':'تم تسجيل الخروج'),'inf');
+}
+
+// Check if user was logged in
+function checkStoredAuth(){
+  const uid=localStorage.getItem('nas_uid');
+  const email=localStorage.getItem('nas_email');
+  const name=localStorage.getItem('nas_name');
+  if(uid&&email){
+    CU={uid,email,name:name||email.split('@')[0],photo:''};
+    updateNavUI();
+    loadNotifs();
+  }
+}
+function updateNavUI(){
+  const av=document.getElementById('navav');
+  const pb=document.getElementById('pbav');
+  const as=document.getElementById('accSettings');
+  if(CU){
+    av.textContent=CU.name.charAt(0).toUpperCase();
+    if(pb)pb.textContent=CU.name.charAt(0).toUpperCase();
+    if(as) as.innerHTML=`
+      <div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid var(--bdr);margin-bottom:9px">
+        <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--acc2),var(--purple));display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:900">${CU.name.charAt(0).toUpperCase()}</div>
+        <div><div style="font-size:13px;font-weight:900;color:var(--txt)">${esc(CU.name)}</div><div style="font-size:10px;color:var(--txt3)">${esc(CU.email)}</div></div>
+      </div>
+      <button class="btn bgh bfull" onclick="showProfile('${CU.uid}')" style="margin-bottom:6px">👤 عرض ملفي</button>
+      <button class="btn br bfull" onclick="doSignOut()">🚪 تسجيل الخروج</button>`;
+  } else {
+    av.textContent='؟';
+    if(pb)pb.textContent='😊';
+    if(as) as.innerHTML=`<button class="btn bp bfull" onclick="openM('authModal')">🔑 تسجيل الدخول</button>`;
+  }
+}
+function navClick(){ if(CU) showProfile(CU.uid); else openM('authModal'); }
+
+// ══════════════════
+//  PAGES
+// ══════════════════
+function pg(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));
+  const el=document.getElementById(p+'Page');
+  if(el)el.classList.add('on');
+  document.querySelectorAll('.bnav-i').forEach(b=>b.classList.remove('on'));
+  const bi=document.getElementById('bi-'+p);
+  if(bi)bi.classList.add('on');
+  if(p==='admin'){renderStats();renderAdminList();}
+  if(p==='notifs')renderNotifList();
+  window.scrollTo(0,0);
+}
+
+// ══════════════════
+//  DATA LOADING
+// ══════════════════
+async function loadAll(){
+  try{
+    listings=await fsList('listings');
+    listings.sort((a,b)=>score(b)-score(a));
+    renderFeed(); renderTrending();
+    if(adminOn){renderStats();renderAdminList();}
+    document.getElementById('dbSt').innerHTML='🟢 متصل';
+  }catch(e){
+    document.getElementById('dbSt').innerHTML='🔴 خطأ';
+  }
+  try{
+    const all=await fsList('professions');
+    profs=all.filter(p=>p.status==='approved');
+    renderProfs();
+  }catch(e){}
+}
+async function loadNotifs(){
+  if(!CU)return;
+  try{
+    const all=await fsQuery('notifications','uid','==',CU.uid);
+    notifs=all;
+    const u=notifs.filter(n=>!n.read).length;
+    const d=document.getElementById('nbtn');
+    if(d)d.textContent=u?'🔔'+u:'🔔';
+  }catch(e){}
+}
+function startPolling(){
+  loadAll();
+  if(pollTimer)clearInterval(pollTimer);
+  pollTimer=setInterval(loadAll,8000);
+}
+
+// ══════════════════
+//  ALGORITHM
+// ══════════════════
+function score(l){
+  let s=0;
+  if(l.verified)s+=300;
+  if(l.featured)s+=200;
+  const age=(Date.now()-getMs(l.date))/(1000*3600);
+  if(age<24)s+=100;else if(age<72)s+=40;
+  s+=(l.views||0)*.1+(l.likes||0)*2;
+  return s;
+}
+function getMs(d){
+  if(!d)return 0;
+  if(d instanceof Date)return d.getTime();
+  if(d.toDate)return d.toDate().getTime();
+  return new Date(d).getTime();
+}
+
+// ══════════════════
+//  CATEGORIES
+// ══════════════════
+function renderCats(){
+  const el=document.getElementById('catsBar');if(!el)return;
+  el.innerHTML=CATS_LIST.map(c=>`<button class="cat${c===activeCat?' on':''}" onclick="setCat('${c}')">${CE[c]||'📦'} ${c}</button>`).join('');
+}
+function renderPCats(){
+  const el=document.getElementById('profCats');if(!el)return;
+  el.innerHTML=PCATS.map(c=>`<button class="cat${c===activePCat?' on':''}" onclick="setPCat('${c}')">${PE[c]||'🔨'} ${c}</button>`).join('');
+}
+function setCat(c){activeCat=c;renderCats();renderFeed();}
+function setPCat(c){activePCat=c;renderPCats();renderProfs();}
+function filterProfs(){profQ=document.getElementById('profSrch')?.value||'';renderProfs();}
+
+// ══════════════════
+//  FEED
+// ══════════════════
+function renderFeed(){
+  const el=document.getElementById('feed');if(!el)return;
+  let items=listings.filter(l=>l.status==='approved');
+  if(activeCat!=='الكل')items=items.filter(l=>l.cat===activeCat);
+  if(srchQ)items=items.filter(l=>(l.title||'').includes(srchQ)||(l.desc||'').includes(srchQ)||(l.seller||'').includes(srchQ));
+  if(!items.length){el.innerHTML=`<div class="empty"><span class="eic">🛍️</span><p>لا توجد إعلانات</p></div>`;return;}
+  el.innerHTML=items.map(postHTML).join('');
+}
+
+function getTags(txt){
+  return[...(txt||'').matchAll(/#([\u0600-\u06FFa-zA-Z0-9_]+)/g)].map(m=>m[1]);
+}
+
+function postHTML(l){
+  const em=CE[l.cat]||'📦';
+  const init=(l.seller||'؟').charAt(0);
+  const liked=CU&&(l.likedBy||[]).includes(CU.uid);
+  const tags=getTags(l.desc);
+  const tagH=tags.length?`<div style="margin-top:5px;display:flex;flex-wrap:wrap;gap:3px">${tags.map(t=>`<span class="htag" onclick="srchTag('${t}')">#${t}</span>`).join('')}</div>`:'';
+  const descClean=(l.desc||'').replace(/#[\u0600-\u06FFa-zA-Z0-9_]+/g,'').trim();
+  const imgEl=l.img?`<img src="${esc(l.img)}" class="post-img" onerror="this.style.display='none'">`:'';
+  return`<div class="post" id="p-${l.id}">
+    <div class="post-hd">
+      <div class="post-av" onclick="showProfile('${l.uid||''}')">
+        ${init}${l.verified?`<div class="vbadge">✓</div>`:''}
+      </div>
+      <div class="post-meta">
+        <div class="post-name" onclick="showProfile('${l.uid||''}')">${esc(l.seller||'')}${l.verified?` <span style="color:var(--acc);font-size:10px">✓</span>`:''}</div>
+        <div class="post-sub">${timeAgo(l.date)} · ${esc(l.cat)}</div>
+      </div>
+      <button class="post-more" onclick="postMenu('${l.id}')">⋯</button>
+    </div>
+    <div class="post-body">
+      <div class="post-txt">${esc(descClean||l.title||'')}</div>
+      ${tagH}
+    </div>
+    ${imgEl}
+    <div class="post-price" onclick="openPost('${l.id}')">
+      <div><div style="font-size:10px;color:var(--txt3);margin-bottom:1px">${esc(l.title)}</div>
+        <span class="pval">${esc(String(l.price))}</span> <span class="pcurr">${esc(l.curr||'MRU')}</span>
+      </div>
+      <span style="font-size:11px;color:var(--acc);font-weight:800">${em} ${esc(l.cat)}</span>
+    </div>
+    <div class="post-acts">
+      <button class="pa${liked?' liked':''}" onclick="toggleLike('${l.id}')">
+        <span class="pa-ic">${liked?'❤️':'🤍'}</span> ${l.likes||0}
+      </button>
+      <button class="pa" onclick="openPost('${l.id}')"><span class="pa-ic">💬</span> تواصل</button>
+      <button class="pa" onclick="openRating('${l.id}','${esc(l.seller||'')}')"><span class="pa-ic">⭐</span> تقييم</button>
+      <button class="pa" onclick="shareP('${l.id}')"><span class="pa-ic">🔗</span> مشاركة</button>
+    </div>
+  </div>`;
+}
+
+// ══════════════════
+//  TRENDING
+// ══════════════════
+function renderTrending(){
+  // Not in sidebar on mobile but skip for now
+}
+
+function srchTag(tag){
+  srchQ='#'+tag;
+  const inp=document.getElementById('navSrch');
+  if(inp)inp.value=srchQ;
+  renderFeed();
+}
+
+// ══════════════════
+//  LIKES
+// ══════════════════
+async function toggleLike(id){
+  if(!CU){openM('authModal');return;}
+  const l=listings.find(x=>x.id===id);if(!l)return;
+  const liked=(l.likedBy||[]).includes(CU.uid);
+  const newLiked=liked?(l.likedBy||[]).filter(x=>x!==CU.uid):[...(l.likedBy||[]),CU.uid];
+  l.likedBy=newLiked;l.likes=newLiked.length;
+  document.getElementById('p-'+id)?.outerHTML;
+  await fsUpdate('listings',id,{likes:newLiked.length,likedBy:newLiked});
+  renderFeed();
+}
+
+// ══════════════════
+//  PROFILE
+// ══════════════════
+async function showProfile(uid){
+  if(!uid){return;}
+  pg('profile');
+  document.getElementById('profileInfo').innerHTML='<div class="spin"></div>';
+  document.getElementById('profileFeed').innerHTML='';
+  try{
+    const u=await fsGet('users',uid)||{name:'مستخدم',photo:'',followers:0,following:0,posts:0,verified:false,handle:'',bio:''};
+    const isMe=CU&&CU.uid===uid;
+    let isFollowing=false;
+    if(CU&&!isMe){
+      const f=await fsGet('follows',CU.uid+'_'+uid);
+      isFollowing=!!f;
     }
-
-    // --- نظام التوثيق (للمشرف) ---
-    window.verifyUser = async (userId) => {
-        // منطق تحديث حالة التوثيق في Firestore
-        toast("تم توثيق الحساب بنجاح!");
-    };
-
-    // --- نظام النشر (بـ 10 أوقية) ---
-    window.openPostModal = () => {
-        const title = prompt("عنوان المنتج:");
-        const price = prompt("السعر:");
-        if(title && price) {
-            alert(`يرجى تحويل 10 أوقية قديمة للرقم ${MY_PHONE} وإرسال الصورة للمشرف`);
-            addDoc(collection(db, "listings"), {
-                title, price, userId: currentUser.uid, status: 'pending', createdAt: serverTimestamp()
-            });
-            toast("تم الإرسال للمراجعة");
+    const av=document.getElementById('pAvEl');
+    if(av)av.textContent=(u.name||'؟').charAt(0).toUpperCase();
+    document.getElementById('profileInfo').innerHTML=`
+      <div class="pname">${esc(u.name||'')}${u.verified?` <span class="bdg bdg-b">✓ موثق</span>`:''}</div>
+      <div class="phandle">${esc(u.handle||'')}</div>
+      ${u.bio?`<div class="pbio">${esc(u.bio)}</div>`:''}
+      <div class="pstats">
+        <div><div class="pstat-n">${u.posts||0}</div><div class="pstat-l">منشور</div></div>
+        <div><div class="pstat-n">${u.followers||0}</div><div class="pstat-l">متابع</div></div>
+        <div><div class="pstat-n">${u.following||0}</div><div class="pstat-l">يتابع</div></div>
+      </div>
+      <div class="pacts">
+        ${isMe
+          ?`<button class="btn bgh bsm" onclick="openM('authModal')">✏️ تعديل</button>`
+          :`<button class="btn ${isFollowing?'bou':'bp'} bsm" onclick="toggleFollow('${uid}')">${isFollowing?'إلغاء المتابعة':'متابعة'}</button>
+            <a href="tel:${esc(u.phone||'')}" class="btn bgh bsm">📞 تواصل</a>`
         }
-    };
+      </div>`;
+    const myL=listings.filter(l=>l.uid===uid&&l.status==='approved');
+    if(myL.length)document.getElementById('profileFeed').innerHTML=myL.map(postHTML).join('');
+    else document.getElementById('profileFeed').innerHTML=`<div class="empty"><span class="eic">📦</span><p>لا توجد إعلانات</p></div>`;
+  }catch(e){document.getElementById('profileInfo').innerHTML='<p style="color:var(--txt3);font-size:12px;padding:10px">تعذر تحميل الملف</p>';}
+}
 
-    // --- نظام أسماء AI ---
-    window.sendToAsma = async () => {
-        const input = document.getElementById('chatInput');
-        const box = document.getElementById('chatBox');
-        if(!input.value) return;
-        box.innerHTML += `<p class="text-right"><b>أنت:</b> ${input.value}</p>`;
-        
-        try {
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ contents: [{ parts: [{ text: `أنت أسماء 1، مساعدة موقع NAS Markets. أجيبي باختصار. السؤال: ${input.value}` }] }] })
-            });
-            const d = await res.json();
-            box.innerHTML += `<p class="text-left text-purple-600"><b>أسماء:</b> ${d.candidates[0].content.parts[0].text}</p>`;
-        } catch(e) { toast("خطأ في AI", 'err'); }
-        input.value = '';
-    };
+async function toggleFollow(targetUid){
+  if(!CU){openM('authModal');return;}
+  if(targetUid===CU.uid)return;
+  const fid=CU.uid+'_'+targetUid;
+  const existing=await fsGet('follows',fid);
+  if(existing){
+    await fsDel('follows',fid);
+    toast('إلغاء المتابعة','inf');
+  }else{
+    await fsSet('follows',fid,{follower:CU.uid,following:targetUid,date:sts()});
+    toast('✅ تمت المتابعة');
+    addNotif(targetUid,'follow',`${CU.name} بدأ بمتابعتك`);
+  }
+  showProfile(targetUid);
+}
 
-    // تبديل الصفحات
-    window.showPage = (p) => {
-        document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
-        document.getElementById(p + 'Page').classList.add('active');
-    };
+// ══════════════════
+//  POST DETAIL
+// ══════════════════
+async function openPost(id){
+  const l=listings.find(x=>x.id===id);if(!l)return;
+  await fsUpdate('listings',id,{views:inc(1)}).catch(()=>{});
+  const em=CE[l.cat]||'📦';
+  const imgEl=l.img?`<img src="${esc(l.img)}" style="width:100%;max-height:320px;object-fit:cover;border-radius:12px;margin-bottom:11px" onerror="this.style.display='none'">`
+    :`<div style="width:100%;height:160px;background:var(--bg2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:70px;margin-bottom:11px">${em}</div>`;
+  document.getElementById('postContent').innerHTML=`
+    <button class="btn bgh bsm" onclick="pg('home')" style="margin-bottom:10px">← ${t('back')}</button>
+    ${imgEl}
+    <div class="card cp" style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:9px">
+        <div><h1 style="font-size:17px;font-weight:900;margin-bottom:4px;color:var(--txt)">${esc(l.title)}</h1>
+          <span class="bdg bdg-b">${esc(l.cat)}</span>
+          ${l.featured?`<span class="bdg bdg-o">⭐</span>`:''}
+          ${l.verified?`<span class="bdg bdg-b">✓ موثق</span>`:''}
+        </div>
+        <div style="font-size:22px;font-weight:900;color:var(--txt)">${esc(String(l.price))} <span style="font-size:11px;color:var(--txt3)">${esc(l.curr||'MRU')}</span></div>
+      </div>
+      <div class="dvd"></div>
+      <p style="font-size:12px;line-height:1.7;color:var(--txt2)">${esc(l.desc||'')}</p>
+      <div style="font-size:10px;color:var(--txt3);margin-top:8px">👁 ${(l.views||0)+1} · ❤️ ${l.likes||0} · 🕐 ${timeAgo(l.date)}</div>
+    </div>
+    <div class="card cp" style="margin-bottom:10px">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px;cursor:pointer" onclick="showProfile('${l.uid||''}')">
+        <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--acc2),var(--purple));display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:900;flex-shrink:0">${(l.seller||'؟').charAt(0)}</div>
+        <div><div style="font-size:14px;font-weight:900;color:var(--txt)">${esc(l.seller||'')}${l.verified?` <span style="color:var(--acc)">✓</span>`:''}</div>
+          <div style="font-size:10px;color:var(--txt3)">البائع</div></div>
+      </div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap">
+        <a href="tel:${esc(l.phone||'')}" class="btn bp bsm">📞 اتصال</a>
+        <a href="https://wa.me/222${esc(l.phone||'')}?text=${encodeURIComponent('NAS Markets: '+l.title)}" target="_blank" class="btn bg bsm">💬 WhatsApp</a>
+        <button class="btn bo bsm" style="background:linear-gradient(135deg,var(--gold2),var(--gold))" onclick="openRating('${l.id}','${esc(l.seller||'')}')">⭐ تقييم</button>
+      </div>
+      <div style="margin-top:10px;background:var(--bg2);border-radius:8px;padding:8px;text-align:center;border:1px solid var(--bdr)">
+        📱 <strong style="font-size:15px;letter-spacing:2px">${esc(l.phone||'')}</strong>
+      </div>
+    </div>
+    <div class="card" id="ratingsBox"><div class="cp"><h3 style="font-size:13px;font-weight:900;margin-bottom:8px">⭐ التقييمات</h3><div id="ratingsBody"><div class="spin"></div></div></div></div>`;
+  pg('post');
+  loadRatings(id);
+}
 
-    // جلب البيانات لحظياً
-    onSnapshot(query(collection(db, "listings"), where("status", "==", "approved")), snap => {
-        renderFeed(snap.docs.map(d => ({id: d.id, ...d.data()})));
+// ══════════════════
+//  RATINGS
+// ══════════════════
+function openRating(id,seller){
+  if(!CU){openM('authModal');return;}
+  ratingLid=id; starPick=0;
+  document.getElementById('ratingFor').textContent=`تقييم البائع: ${seller}`;
+  rstStar();
+  document.getElementById('rCmt').value='';
+  openM('ratingModal');
+}
+function hvStar(n){document.querySelectorAll('.ss').forEach((s,i)=>s.classList.toggle('on',i<n));}
+function rstStar(){document.querySelectorAll('.ss').forEach((s,i)=>s.classList.toggle('on',i<starPick));}
+function setStar(n){starPick=n;rstStar();}
+async function submitRating(){
+  if(!starPick){toast('⚠️ اختر نجوم','err');return;}
+  try{
+    await fsAdd('ratings',{listingId:ratingLid,reviewer:CU.name||'مستخدم',stars:starPick,comment:V('rCmt'),uid:CU.uid,date:sts()});
+    closeM('ratingModal');toast('✅ شكراً على تقييمك!');
+    loadRatings(ratingLid);
+  }catch(e){toast('❌ خطأ','err');}
+}
+async function loadRatings(id){
+  const el=document.getElementById('ratingsBody');if(!el)return;
+  try{
+    const rs=await fsQuery('ratings','listingId','==',id);
+    if(!rs.length){el.innerHTML=`<p style="font-size:11px;color:var(--txt3)">لا توجد تقييمات بعد</p>`;return;}
+    const avg=(rs.reduce((a,r)=>a+r.stars,0)/rs.length).toFixed(1);
+    const stH=n=>[1,2,3,4,5].map(i=>`<span class="${i<=Math.round(n)?'s-on':'s-off'}" style="font-size:12px">★</span>`).join('');
+    el.innerHTML=`
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;padding:8px;background:var(--bg2);border-radius:8px;border:1px solid var(--bdr)">
+        <div style="font-size:22px;font-weight:900;color:var(--gold2)">${avg}</div>
+        <div><div style="display:flex;gap:1px">${stH(avg)}</div><div style="font-size:10px;color:var(--txt3);margin-top:1px">${rs.length} تقييم</div></div>
+      </div>
+      ${rs.slice(0,5).map(r=>`<div style="background:var(--bg2);border-radius:7px;padding:7px 9px;margin-bottom:5px;border:1px solid var(--bdr)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">
+          <span style="font-size:11px;font-weight:800;color:var(--txt)">👤 ${esc(r.reviewer||'')}</span>
+          <span style="display:flex;gap:1px">${stH(r.stars)}</span>
+        </div>
+        ${r.comment?`<div style="font-size:11px;color:var(--txt2)">${esc(r.comment)}</div>`:''}</div>`).join('')}`;
+  }catch(e){el.innerHTML='';}
+}
+
+// ══════════════════
+//  PROFS
+// ══════════════════
+function renderProfs(){
+  const g=document.getElementById('profGrid');if(!g)return;
+  let items=[...profs];
+  if(activePCat!=='الكل')items=items.filter(p=>p.cat===activePCat);
+  if(profQ)items=items.filter(p=>(p.name||'').includes(profQ)||(p.job||'').includes(profQ)||(p.bio||'').includes(profQ));
+  const lbl=document.getElementById('profCount');
+  if(lbl)lbl.textContent=items.length+(lang==='fr'?' artisans':lang==='en'?' pros':' حرفي');
+  if(!items.length){g.innerHTML=`<div class="empty" style="grid-column:1/-1"><span class="eic">👷</span><p>لا يوجد حرفيون</p></div>`;return;}
+  g.innerHTML=items.map(p=>{
+    const avgS=p.ratingCount?((p.totalStars||0)/p.ratingCount).toFixed(1):'—';
+    const stH=n=>[1,2,3,4,5].map(i=>`<span class="${i<=Math.round(n)?'s-on':'s-off'}" style="font-size:11px">★</span>`).join('');
+    return`<div class="pcard">
+      <div class="pcard-av">${PE[p.cat]||'🔨'}</div>
+      <div class="pcard-name">${esc(p.name||'')}${p.verified?` <span style="color:var(--acc);font-size:10px">✓</span>`:''}</div>
+      <div class="pcard-job">${esc(p.job||'')}${p.city?` · 📍${esc(p.city)}`:''}</div>
+      <div class="pcard-bio">${esc(p.bio||'')}</div>
+      <div class="pcard-ft">
+        <div class="stars">
+          <span style="font-size:11px;font-weight:800;color:var(--gold2)">${avgS}</span>
+          ${avgS!=='—'?stH(parseFloat(avgS)):''}
+        </div>
+        <div style="display:flex;gap:4px">
+          <a href="tel:${esc(p.phone||'')}" class="btn bp bsm">📞</a>
+          <a href="https://wa.me/222${esc(p.phone||'')}" target="_blank" class="btn bg bsm">💬</a>
+        </div>
+      </div>
+    </div>`;}).join('');
+}
+function profNext(){
+  const nm=V('pName'),ph=V('pPhone'),jb=V('pJob');
+  if(!nm||!ph||!jb){toast('⚠️ أكمل البيانات','err');return;}
+  document.getElementById('profSum').textContent=`${nm} · ${jb} · ${V('pCat')}`;
+  document.getElementById('profS1').style.display='none';
+  document.getElementById('profS2').style.display='block';
+}
+function profBack(){
+  document.getElementById('profS1').style.display='block';
+  document.getElementById('profS2').style.display='none';
+}
+async function submitProf(){
+  try{
+    await fsAdd('professions',{name:V('pName'),phone:V('pPhone'),job:V('pJob'),cat:V('pCat'),city:V('pCity'),bio:V('pBio'),status:'pending',verified:false,totalStars:0,ratingCount:0,uid:CU?.uid||'',date:sts()});
+    closeM('profModal');
+    ['pName','pPhone','pJob','pCity','pBio'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    profBack();
+    toast('✅ تم الإرسال!');
+  }catch(e){toast('❌ خطأ','err');}
+}
+
+// ══════════════════
+//  SELL
+// ══════════════════
+function openSellCat(cat){
+  openM('sellModal');
+  setTimeout(()=>{const el=document.getElementById('sCat');if(el)el.value=cat;},100);
+}
+function prvImg(url){
+  const p=document.getElementById('imgPrv');if(!p)return;
+  if(url)p.innerHTML=`<img src="${esc(url)}" style="width:100%;height:100%;object-fit:cover;border-radius:6px" onerror="this.parentElement.innerHTML='<span>⚠️ تعذر التحميل</span>'">`;
+  else p.innerHTML=`<span id="t-imgprev">${t('imgprev')}</span>`;
+}
+function sellNext(){
+  const nm=V('sName'),ph=V('sPhone'),ti=V('sTitle'),pr=V('sPrice');
+  if(!nm||!ph||!ti||!pr){toast('⚠️ أكمل الحقول الأساسية','err');return;}
+  document.getElementById('sellSum').textContent=`${ti} · ${pr} ${V('sCurr')}`;
+  document.getElementById('sellS1').style.display='none';
+  document.getElementById('sellS2').style.display='block';
+  document.getElementById('s1').classList.remove('on');
+  document.getElementById('s2').classList.add('on');
+}
+function sellBack(){
+  document.getElementById('sellS1').style.display='block';
+  document.getElementById('sellS2').style.display='none';
+  document.getElementById('s1').classList.add('on');
+  document.getElementById('s2').classList.remove('on');
+}
+async function submitSell(){
+  try{
+    await fsAdd('listings',{seller:V('sName'),phone:V('sPhone'),title:V('sTitle'),desc:V('sDesc'),price:parseFloat(V('sPrice'))||0,curr:V('sCurr'),cat:V('sCat'),img:V('sImg'),status:'pending',featured:false,verified:CU?false:false,views:0,likes:0,likedBy:[],uid:CU?.uid||'',date:sts()});
+    if(CU) await fsUpdate('users',CU.uid,{posts:inc(1)}).catch(()=>{});
+    closeM('sellModal');
+    ['sName','sPhone','sTitle','sDesc','sPrice','sImg'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    sellBack();
+    document.getElementById('imgPrv').innerHTML=`<span>${t('imgprev')}</span>`;
+    const ov=document.createElement('div');ov.className='ov on';
+    ov.innerHTML=`<div class="modal" style="max-width:300px;text-align:center"><div style="font-size:52px;margin-bottom:8px">🎉</div><h2 style="margin-bottom:6px;font-size:16px">تم الإرسال!</h2><p style="color:var(--txt2);font-size:11px;line-height:1.8;margin-bottom:14px">💳 10 MRU · 46152629 Bankily</p><button class="btn bp bfull" onclick="this.closest('.ov').remove()">👍</button></div>`;
+    document.body.appendChild(ov);
+    toast('✅');
+    loadAll();
+  }catch(e){toast('❌ خطأ: '+e.message,'err');}
+}
+
+// ══════════════════
+//  AI DESCRIBE
+// ══════════════════
+async function aiDescribe(){
+  const ti=V('sTitle'),cat=V('sCat'),pr=V('sPrice');
+  if(!ti){toast('⚠️ أدخل العنوان أولاً','err');return;}
+  toast('⏳ Gemini يكتب...','inf');
+  const p=lang==='fr'
+    ?`Rédige une description commerciale courte (3-4 phrases) en français pour cette annonce mauritanienne:\nTitre: ${ti}\nCatégorie: ${cat}\nPrix: ${pr} MRU\nTexte naturel uniquement.`
+    :lang==='en'
+    ?`Write a short listing description (3-4 sentences) in English:\nTitle: ${ti}\nCategory: ${cat}\nPrice: ${pr} MRU\nNatural text only.`
+    :`اكتب وصفاً تجارياً قصيراً (3-4 جمل) بالعربية:\nالعنوان: ${ti}\nالفئة: ${cat}\nالسعر: ${pr} MRU\nنص طبيعي فقط.`;
+  try{
+    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GK}`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{role:'user',parts:[{text:p}]}],generationConfig:{temperature:.8,maxOutputTokens:200}})
     });
+    const d=await r.json();
+    const txt=d?.candidates?.[0]?.content?.parts?.[0]?.text||'';
+    if(txt){document.getElementById('sDesc').value=txt.trim();toast('✨ تم!');}
+    else toast('❌ لم يستجب Gemini','err');
+  }catch(e){toast('❌ خطأ في الاتصال','err');}
+}
 
+// ══════════════════
+//  ASMA CHAT
+// ══════════════════
+async function sendChat(){
+  const inp=document.getElementById('chatInp');
+  const msg=inp.value.trim();if(!msg)return;
+  inp.value='';
+  addMsg(msg,'u');
+  const appr=listings.filter(l=>l.status==='approved').slice(0,25);
+  const ls=appr.map(l=>`- ${l.title}: ${l.price} ${l.curr||'MRU'} (${l.cat})`).join('\n');
+  const sys=lang==='fr'
+    ?`Tu es Asmaa 1, assistante de NAS Markets (Mauritanie). Réponds en français. Par Sidan.\nAnnonces:\n${ls}\nSois concise et amicale.`
+    :lang==='en'
+    ?`You are Asma 1, assistant of NAS Markets (Mauritania). Reply in English. By Sidan.\nListings:\n${ls}\nBe concise and friendly.`
+    :`أنت أسماء 1، مساعدة NAS Markets الموريتاني. أجب بالعربية فقط. بواسطة سيدن.\nالإعلانات:\n${ls}\nاكوني مختصرة وودودة.`;
+  const tid='t'+Date.now();
+  const msgs=document.getElementById('chatMsgs');
+  msgs.innerHTML+=`<div class="msg b" id="${tid}"><div class="bbl"><div class="ty"><span></span><span></span><span></span></div></div></div>`;
+  msgs.scrollTop=msgs.scrollHeight;
+  try{
+    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GK}`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{role:'user',parts:[{text:sys+'\n\nUser: '+msg}]}],generationConfig:{temperature:.7,maxOutputTokens:400}})
+    });
+    const d=await r.json();
+    const rep=d?.candidates?.[0]?.content?.parts?.[0]?.text||(lang==='fr'?'Erreur.':lang==='en'?'Error.':'خطأ.');
+    document.getElementById(tid)?.remove();
+    addMsg(rep,'b');
+  }catch(e){document.getElementById(tid)?.remove();addMsg('خطأ في الاتصال.','b');}
+}
+function addMsg(text,role){
+  const msgs=document.getElementById('chatMsgs');if(!msgs)return;
+  msgs.innerHTML+=`<div class="msg ${role}"><div class="bbl">${esc(text)}</div><div class="msg-t">${nowTime()}</div></div>`;
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+// ══════════════════
+//  NOTIFICATIONS
+// ══════════════════
+async function addNotif(uid,type,text){
+  try{await fsAdd('notifications',{uid,type,text,read:false,date:sts()});}catch(e){}
+}
+function renderNotifList(){
+  const el=document.getElementById('notifList');if(!el)return;
+  if(!CU){el.innerHTML=`<div class="empty" style="padding:25px"><span class="eic">🔔</span><p>سجّل دخولك</p></div>`;return;}
+  if(!notifs.length){el.innerHTML=`<div class="empty" style="padding:25px"><span class="eic">🔔</span><p>لا توجد إشعارات</p></div>`;return;}
+  const sorted=[...notifs].sort((a,b)=>getMs(b.date)-getMs(a.date));
+  el.innerHTML=sorted.map(n=>`
+    <div class="ni${n.read?'':' unread'}" onclick="markRead('${n.id}')">
+      <div class="ni-av">${n.type==='like'?'❤️':n.type==='follow'?'👤':'🔔'}</div>
+      <div style="flex:1"><div class="ni-txt">${esc(n.text||'')}</div><div class="ni-t">${timeAgo(n.date)}</div></div>
+      ${!n.read?`<div class="ndot"></div>`:''}
+    </div>`).join('');
+}
+async function markRead(id){
+  await fsUpdate('notifications',id,{read:true}).catch(()=>{});
+  const n=notifs.find(x=>x.id===id);if(n)n.read=true;
+  renderNotifList();
+  loadNotifs();
+}
+async function markAllRead(){
+  for(const n of notifs.filter(x=>!x.read)){
+    await fsUpdate('notifications',n.id,{read:true}).catch(()=>{});
+  }
+  notifs.forEach(n=>n.read=true);
+  renderNotifList();loadNotifs();
+}
+
+// ══════════════════
+//  SHARE / MENU
+// ══════════════════
+function shareP(id){
+  const l=listings.find(x=>x.id===id);if(!l)return;
+  const txt=`🛍️ ${l.title}\n💰 ${l.price} ${l.curr||'MRU'}\n📞 ${l.phone}\n\nNAS Markets`;
+  if(navigator.share)navigator.share({title:l.title,text:txt});
+  else{navigator.clipboard?.writeText(txt).catch(()=>{});toast('📋 تم النسخ','inf');}
+}
+function postMenu(id){
+  const l=listings.find(x=>x.id===id);if(!l)return;
+  const isOwner=CU&&CU.uid===l.uid;
+  const ov=document.createElement('div');ov.className='ov on';
+  ov.innerHTML=`<div class="modal" style="max-width:260px">
+    <div class="mhd"><div class="mtitle">خيارات</div><button class="mclose" onclick="this.closest('.ov').remove()">✕</button></div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <button class="btn bgh bfull" onclick="shareP('${id}');this.closest('.ov').remove()">🔗 مشاركة</button>
+      ${isOwner?`<button class="btn br bfull" onclick="if(confirm('حذف الإعلان؟'))delMyPost('${id}');this.closest('.ov').remove()">🗑️ حذف إعلاني</button>`:''}
+      <button class="btn bou bfull" onclick="this.closest('.ov').remove()">إلغاء</button>
+    </div>
+  </div>`;
+  document.body.appendChild(ov);
+}
+async function delMyPost(id){
+  try{
+    await fsDel('listings',id);
+    if(CU)await fsUpdate('users',CU.uid,{posts:inc(-1)}).catch(()=>{});
+    toast('🗑️','inf');
+    loadAll();
+  }catch(e){toast('❌','err');}
+}
+
+// ══════════════════
+//  ADMIN
+// ══════════════════
+function goAdmin(){ if(!adminOn){openM('adminLogin');return;} pg('admin'); }
+function checkAdmin(){
+  const pw=document.getElementById('adminPwd').value;
+  const type=ADMIN_PASSES[pw];
+  if(type==='esma'){
+    adminOn=true;
+    document.getElementById('adminPwd').value='';
+    closeM('adminLogin'); pg('admin');
+    setTimeout(()=>{
+      const ov=document.createElement('div');ov.className='ov on';
+      ov.innerHTML=`<div class="modal" style="max-width:280px;text-align:center">
+        <div style="font-size:52px;margin-bottom:8px">💜</div>
+        <h2 style="background:linear-gradient(135deg,#7c3aed,var(--acc));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px">أهلاً أسماء! 👋</h2>
+        <p style="color:var(--txt2);font-size:12px;line-height:1.7;margin-bottom:14px">مرحباً بكِ في لوحة التحكم ✨</p>
+        <button class="btn bpu bfull" onclick="this.closest('.ov').remove()">شكراً 💜</button>
+      </div>`;
+      document.body.appendChild(ov);
+    },150);
+    const t2=document.getElementById('toast');t2.className='tspc';t2.textContent='💜 أهلاً أسماء!';t2.style.display='block';clearTimeout(t2._t);t2._t=setTimeout(()=>t2.style.display='none',4000);
+  } else if(type==='normal'){
+    adminOn=true;
+    document.getElementById('adminPwd').value='';
+    closeM('adminLogin'); pg('admin');
+    toast('✅ مرحباً بك يا مشرف!');
+  } else {
+    toast('❌ كلمة المرور خاطئة','err');
+  }
+}
+function aTab(btn,tab){
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');curAdminTab=tab;renderAdminList();
+}
+function renderStats(){
+  const pend=listings.filter(l=>l.status==='pending').length;
+  const appr=listings.filter(l=>l.status==='approved').length;
+  const feat=listings.filter(l=>l.featured).length;
+  const views=listings.reduce((a,l)=>a+(l.views||0),0);
+  document.getElementById('statsGrid').innerHTML=`
+    <div class="sc"><div class="sn">${pend}</div><div class="sl">⏳ معلقة</div></div>
+    <div class="sc"><div class="sn">${appr}</div><div class="sl">✅ نشطة</div></div>
+    <div class="sc"><div class="sn">${feat}</div><div class="sl">⭐ مميزة</div></div>
+    <div class="sc"><div class="sn">${views}</div><div class="sl">👁 مشاهدات</div></div>`;
+}
+async function renderAdminList(){
+  const c=document.getElementById('adminList');if(!c)return;
+  if(curAdminTab==='profs'){renderAdminProfs();return;}
+  let items=listings.filter(l=>
+    curAdminTab==='pending'?l.status==='pending':
+    curAdminTab==='featured'?l.featured:l.status==='approved');
+  items.sort((a,b)=>getMs(b.date)-getMs(a.date));
+  if(!items.length){c.innerHTML=`<div class="empty"><span class="eic">📭</span><p>لا توجد عناصر</p></div>`;return;}
+  c.innerHTML=items.map(l=>{
+    const em=CE[l.cat]||'📦';
+    const imgEl=l.img?`<img src="${esc(l.img)}" class="ar-img" style="width:56px;height:56px;border-radius:9px;object-fit:cover;flex-shrink:0" onerror="this.outerHTML='<div class=\\'ar-img\\'>${em}</div>'">`:`<div class="ar-img">${em}</div>`;
+    const acts=curAdminTab==='pending'
+      ?`<button class="btn bg bsm" onclick="aApprove('${l.id}')">✅</button><button class="btn br bsm" onclick="aDel('${l.id}')">🗑️</button>`
+      :`${l.status==='approved'?`<button class="btn bo bsm" style="background:linear-gradient(135deg,var(--gold2),var(--gold))" onclick="aFeat('${l.id}')">${l.featured?'★':'⭐'}</button>`:``}
+        <button class="btn bp bsm" onclick="aVerify('${l.id}',${!!l.verified})">${l.verified?'✓':'🔰'}</button>
+        <button class="btn br bsm" onclick="aDel('${l.id}')">🗑️</button>`;
+    return`<div class="ar">${imgEl}
+      <div class="ar-inf">
+        <h4>${esc(l.title)} <span class="bdg ${l.status==='pending'?'bdg-r':'bdg-g'}">${l.status==='pending'?'⏳':'✅'}</span>${l.featured?`<span class="bdg bdg-o">⭐</span>`:''}${l.verified?`<span class="bdg bdg-b">✓</span>`:''}</h4>
+        <p>👤 ${esc(l.seller||'')} · 📱 ${esc(l.phone||'')}</p>
+        <p>💰 ${esc(String(l.price||0))} ${esc(l.curr||'MRU')} · ${esc(l.cat||'')}</p>
+        <p style="font-size:10px;margin-top:1px">🕐 ${timeAgo(l.date)} · 👁 ${l.views||0}</p>
+        ${curAdminTab==='pending'?`<p style="font-size:9px;background:rgba(245,158,11,.1);padding:2px 6px;border-radius:5px;color:var(--gold2);margin-top:3px">⚠️ 10 MRU · 46152629</p>`:''}
+      </div>
+      <div class="ar-acts">${acts}</div>
+    </div>`;}).join('');
+}
+async function renderAdminProfs(){
+  const c=document.getElementById('adminList');
+  c.innerHTML='<div class="spin"></div>';
+  const all=await fsList('professions');
+  if(!all.length){c.innerHTML=`<div class="empty"><span class="eic">👷</span><p>لا توجد مهن</p></div>`;return;}
+  c.innerHTML=all.map(p=>`<div class="ar">
+    <div class="ar-img">${PE[p.cat]||'🔨'}</div>
+    <div class="ar-inf">
+      <h4>${esc(p.name||'')} <span class="bdg ${p.status==='pending'?'bdg-r':'bdg-g'}">${p.status==='pending'?'⏳':'✅'}</span>${p.verified?`<span class="bdg bdg-b">✓</span>`:''}</h4>
+      <p>🔨 ${esc(p.job||'')} · ${esc(p.cat||'')}</p>
+      <p>📱 ${esc(p.phone||'')}${p.city?` · 📍${esc(p.city)}`:''}</p>
+    </div>
+    <div class="ar-acts">
+      ${p.status==='pending'?`<button class="btn bg bsm" onclick="aPApprove('${p.id}')">✅</button>`:''}
+      <button class="btn bp bsm" onclick="aPVerify('${p.id}',${!!p.verified})">${p.verified?'✓':'🔰'}</button>
+      <button class="btn br bsm" onclick="aPDel('${p.id}')">🗑️</button>
+    </div>
+  </div>`).join('');
+}
+async function aApprove(id){try{await fsUpdate('listings',id,{status:'approved'});toast('✅');loadAll();}catch(e){}}
+async function aDel(id){if(!confirm('حذف؟'))return;try{await fsDel('listings',id);toast('🗑️','inf');loadAll();}catch(e){}}
+async function aFeat(id){const l=listings.find(x=>x.id===id);if(!l)return;try{await fsUpdate('listings',id,{featured:!l.featured});loadAll();}catch(e){}}
+async function aVerify(id,cur){try{await fsUpdate('listings',id,{verified:!cur});toast(!cur?'✓ موثق':'تم الإلغاء');loadAll();}catch(e){}}
+async function aPApprove(id){try{await fsUpdate('professions',id,{status:'approved'});toast('✅');renderAdminProfs();}catch(e){}}
+async function aPDel(id){if(!confirm('حذف؟'))return;try{await fsDel('professions',id);toast('🗑️','inf');renderAdminProfs();}catch(e){}}
+async function aPVerify(id,cur){try{await fsUpdate('professions',id,{verified:!cur});toast(!cur?'✓ موثق':'تم الإلغاء');renderAdminProfs();}catch(e){}}
+
+// ══════════════════
+//  HELPERS
+// ══════════════════
+function openM(id){document.getElementById(id)?.classList.add('on');}
+function closeM(id){document.getElementById(id)?.classList.remove('on');}
+function V(id){return document.getElementById(id)?.value?.trim()||'';}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function toast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  t.className=type==='err'?'terr':type==='inf'?'tinf':type==='spc'?'tspc':'tok';
+  t.textContent=msg;t.style.display='block';
+  clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',3500);
+}
+function timeAgo(d){
+  if(!d)return'';
+  const date=d instanceof Date?d:(d.toDate?d.toDate():new Date(d));
+  const s=Math.floor((Date.now()-date)/1000);
+  if(s<60)return'الآن';
+  if(s<3600)return Math.floor(s/60)+' د';
+  if(s<86400)return Math.floor(s/3600)+' س';
+  return Math.floor(s/86400)+' ي';
+}
+function nowTime(){return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}
+
+// close overlay on bg click
+document.querySelectorAll('.ov').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('on')}));
+
+document.getElementById('asmaTime').textContent=nowTime();
+
+// ══════════════════
+//  SEED DATA
+// ══════════════════
+async function seedIfEmpty(){
+  const data=await fsList('listings');
+  if(data.length===0){
+    await fsAdd('listings',{seller:'أحمد محمد',phone:'46123456',title:'آيفون 14 برو ماكس',desc:'حالة ممتازة، 4 أشهر، مع الشاحن. #هواتف #ايفون',price:1500,curr:'MRU',cat:'هواتف',img:'',status:'approved',featured:true,verified:true,views:142,likes:18,likedBy:[],uid:'',date:new Date().toISOString()});
+    await fsAdd('listings',{seller:'فاطمة سالم',phone:'47654321',title:'طاولة مكتبية خشب',desc:'160×80 حالة ممتازة. #أثاث',price:850,curr:'MRU',cat:'أثاث',img:'',status:'approved',featured:false,verified:false,views:87,likes:5,likedBy:[],uid:'',date:new Date(Date.now()-7200000).toISOString()});
+    await fsAdd('listings',{seller:'خالد عمر',phone:'22334455',title:'تويوتا كورولا 2019',desc:'45000 كم فقط. فحص كامل. #سيارات #تويوتا',price:280000,curr:'MRU',cat:'سيارات',img:'',status:'approved',featured:false,verified:true,views:310,likes:42,likedBy:[],uid:'',date:new Date(Date.now()-86400000).toISOString()});
+  }
+}
+
+// ══════════════════
+//  INIT
+// ══════════════════
+applyDark();
+applyLang();
+renderCats();
+renderPCats();
+checkStoredAuth();
+seedIfEmpty().then(()=>startPolling());
 </script>
 </body>
 </html>
