@@ -1268,9 +1268,9 @@ async function aiDescribe(){
     ?`Write a short listing description (3-4 sentences) in English:\nTitle: ${ti}\nCategory: ${cat}\nPrice: ${pr} MRU\nNatural text only.`
     :`اكتب وصفاً تجارياً قصيراً (3-4 جمل) بالعربية:\nالعنوان: ${ti}\nالفئة: ${cat}\nالسعر: ${pr} MRU\nنص طبيعي فقط.`;
   try{
-    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GK}`,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({contents:[{role:'user',parts:[{text:p}]}],generationConfig:{temperature:.8,maxOutputTokens:200}})
+    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GK}`,{
+      method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':GK},
+      body:JSON.stringify({contents:[{parts:[{text:p}]}],generationConfig:{temperature:.8,maxOutputTokens:200}})
     });
     const d=await r.json();
     const txt=d?.candidates?.[0]?.content?.parts?.[0]?.text||'';
@@ -1299,15 +1299,15 @@ async function sendChat(){
   msgs.innerHTML+=`<div class="msg b" id="${tid}"><div class="bbl"><div class="ty"><span></span><span></span><span></span></div></div></div>`;
   msgs.scrollTop=msgs.scrollHeight;
   try{
-    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GK}`,{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({contents:[{role:'user',parts:[{text:sys+'\n\nUser: '+msg}]}],generationConfig:{temperature:.7,maxOutputTokens:400}})
+    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GK}`,{
+      method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':GK},
+      body:JSON.stringify({contents:[{parts:[{text:sys+'\n\nUser: '+msg}]}],generationConfig:{temperature:.7,maxOutputTokens:400}})
     });
     const d=await r.json();
     const rep=d?.candidates?.[0]?.content?.parts?.[0]?.text||(lang==='fr'?'Erreur.':lang==='en'?'Error.':'خطأ.');
     document.getElementById(tid)?.remove();
     addMsg(rep,'b');
-  }catch(e){document.getElementById(tid)?.remove();addMsg('خطأ في الاتصال.','b');}
+  }catch(e){document.getElementById(tid)?.remove();addMsg('عذراً، تعذر الاتصال بـ Gemini. تأكد من اتصال الإنترنت.','b');}
 }
 function addMsg(text,role){
   const msgs=document.getElementById('chatMsgs');if(!msgs)return;
@@ -1532,3 +1532,4 @@ seedIfEmpty().then(()=>startPolling());
 </script>
 </body>
 </html>
+
